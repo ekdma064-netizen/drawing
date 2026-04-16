@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>살아있는 그림 🎨</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: sans-serif; background: #f0f4ff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+.card { background: white; border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); padding: 24px; width: 100%; max-width: 560px; margin-bottom: 16px; }
+h1 { font-size: 1.7rem; font-weight: 800; color: #5c35d4; text-align: center; margin: 8px 0 4px; }
+.sub { color: #888; font-size: 0.9rem; text-align: center; margin-bottom: 20px; }
+label.upload {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border: 3px dashed #b2beff; background: #f7f8ff; color: #5c35d4;
+  font-weight: 700; padding: 36px 20px; border-radius: 16px; cursor: pointer;
+  text-align: center; gap: 8px;
+}
+label.upload:hover { background: #eef0ff; }
+label.upload span.sub2 { font-size: 0.8rem; color: #aaa; font-weight: 400; }
+button {
+  display: block; width: 100%; padding: 14px; border-radius: 12px;
+  border: none; font-size: 1rem; font-weight: 700; cursor: pointer;
+  margin-top: 10px; transition: opacity 0.2s;
+}
+button:hover { opacity: 0.85; }
+.btn-purple { background: #7c5ce1; color: white; }
+.btn-yellow { background: #f9a825; color: white; font-size: 1.1rem; }
+.btn-gray { background: #eee; color: #555; }
+.btn-green { background: #00b894; color: white; }
+#videoBox { display: none; position: relative; margin-top: 12px; }
+video { width: 100%; border-radius: 12px; display: block; }
+#snapBtn {
+  position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+  width: 58px; height: 58px; border-radius: 50%; background: white;
+  border: 4px solid #7c5ce1; font-size: 1.5rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 0; padding: 0;
+}
+img.preview { width: 100%; border-radius: 12px; display: block; }
+.spinner-wrap { text-align: center; padding: 30px; }
+.spinner { width: 48px; height: 48px; border: 5px solid #eee; border-top-color: #7c5ce1; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.anim-wrap { position: relative; border-radius: 12px; overflow: hidden; }
+#resultImg { width: 100%; display: block; border-radius: 12px; }
+canvas#cvs { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+.desc { background: #f3f0ff; border-left: 4px solid #7c5ce1; border-radius: 10px; padding: 14px 16px; margin-top: 14px; font-size: 0.95rem; color: #444; line-height: 1.6; }
+.hidden { display: none !important; }
+.api-box { background: #fffbea; border: 1.5px solid #ffe082; border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; }
+.api-box label { font-size: 0.85rem; font-weight: 700; color: #7c5c00; display: block; margin-bottom: 6px; }
+.api-box input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.5px solid #ffe082; font-size: 0.9rem; outline: none; }
+.api-box input:focus { border-color: #f9a825; }
+.api-note { font-size: 0.75rem; color: #aaa; margin-top: 6px; }
+.api-note a { color: #7c5ce1; }
+@keyframes aBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes aFloat  { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-6px) rotate(1deg)} }
+@keyframes aPulse  { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+@keyframes aWave   { 0%,100%{transform:skewX(0deg)} 25%{transform:skewX(2deg)} 75%{transform:skewX(-2deg)} }
+</style>
+</head>
+<body>
+
+<div style="font-size:2.5rem;text-align:center;margin-top:4px">🎨</div>
+<h1>살아있는 그림</h1>
+<p class="sub">내 그림에 마법을 걸어요! ✨</p>
+
+<!-- API 키 입력 -->
+<div class="card">
+  <div class="api-box">
+    <label for="apiKey">🔑 Anthropic API 키를 입력하세요</label>
+    <input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off">
+    <div class="api-note">키는 브라우저에만 저장되며 외부로 전송되지 않아요. &nbsp;<a href="https://console.anthropic.com/settings/keys" target="_blank">키 발급받기 →</a></div>
+  </div>
+</div>
+
+<!-- 업로드 카드 -->
+<div class="card" id="cardUpload">
+  <label class="upload" for="fileIn">
+    <span style="font-size:2rem">🖼️</span>
+    <span>여기를 눌러서 그림을 업로드하세요</span>
+    <span class="sub2">JPG, PNG 등 이미지 파일</span>
+    <input type="file" id="fileIn" accept="image/*" style="display:none">
+  </label>
+  <button class="btn-purple" id="camBtn">📷 카메라로 찍기</button>
+  <div id="videoBox">
+    <video id="vid" autoplay playsinline muted></video>
+    <button id="snapBtn">📸</button>
+  </div>
+</div>
+
+<!-- 미리보기 카드 -->
+<div class="card hidden" id="cardPreview">
+  <img class="preview" id="previewImg" alt="미리보기">
+  <button class="btn-yellow" id="goBtn">✨ 그림을 살려줘!</button>
+  <button class="btn-gray" id="resetBtn1">🔄 다시 선택</button>
+</div>
+
+<!-- 로딩 카드 -->
+<div class="card hidden" id="cardLoading">
+  <div class="spinner-wrap">
+    <div class="spinner"></div>
+    <p style="color:#888">그림을 분석하고 있어요... 🔍</p>
+  </div>
+</div>
+
+<!-- 결과 카드 -->
+<div class="card hidden" id="cardResult">
+  <p style="font-weight:700;margin-bottom:12px;color:#333">🌟 그림이 살아났어요!</p>
+  <div class="anim-wrap" id="animWrap">
+    <img id="resultImg" alt="결과">
+    <canvas id="cvs"></canvas>
+  </div>
+  <div class="desc" id="descText"></div>
+  <button class="btn-green" id="reBtn">🔮 다시 마법 걸기</button>
+  <button class="btn-gray" id="resetBtn2">🔄 새 그림 선택</button>
+</div>
+
+<script>
+var b64 = null, mstream = null, raf = null, lastTheme = "generic";
+
+var EMOJIS = {
+  nature:   ["🌸","🍃","🌺","🦋","🌻","🌿"],
+  ocean:    ["🐠","🫧","🌊","🐙","🐚","⭐"],
+  space:    ["⭐","✨","💫","🌟","☄️","🪐"],
+  animals:  ["🐾","💛","✨","🌟","💕","🎵"],
+  people:   ["💗","🎵","🌟","✨","🎉","💫"],
+  vehicles: ["💨","⭐","✨","💥","🌟","🎆"],
+  fantasy:  ["✨","💫","🌈","⚡","🔮","🌟"],
+  generic:  ["✨","⭐","💫","🌟","🎉","🌈"]
+};
+var ANIMS = {
+  bounce: "aBounce 2s ease-in-out infinite",
+  float:  "aFloat 3s ease-in-out infinite",
+  sparkle:"aPulse 2s ease-in-out infinite",
+  wave:   "aWave 2s ease-in-out infinite"
+};
+
+function show(id) { document.getElementById(id).classList.remove("hidden"); }
+function hide(id) { document.getElementById(id).classList.add("hidden"); }
+function getKey() { return document.getElementById("apiKey").value.trim(); }
+
+document.getElementById("fileIn").addEventListener("change", function() {
+  var file = this.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    b64 = e.target.result.split(",")[1];
+    document.getElementById("previewImg").src = e.target.result;
+    hide("cardUpload"); show("cardPreview");
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById("camBtn").addEventListener("click", function() {
+  if (mstream) { stopCam(); return; }
+  navigator.mediaDevices.getUserMedia({ video: { facingMode:"environment" }, audio: false })
+    .then(function(s) {
+      mstream = s;
+      document.getElementById("vid").srcObject = s;
+      document.getElementById("videoBox").style.display = "block";
+      document.getElementById("camBtn").textContent = "✖ 카메라 닫기";
+    })
+    .catch(function() { alert("카메라를 사용할 수 없어요.\n파일 업로드를 이용해주세요."); });
+});
+
+document.getElementById("snapBtn").addEventListener("click", function() {
+  var v = document.getElementById("vid");
+  var c = document.createElement("canvas");
+  c.width = v.videoWidth || 640; c.height = v.videoHeight || 480;
+  c.getContext("2d").drawImage(v, 0, 0);
+  c.toBlob(function(blob) {
+    var r = new FileReader();
+    r.onload = function(e) {
+      b64 = e.target.result.split(",")[1];
+      document.getElementById("previewImg").src = e.target.result;
+      stopCam(); hide("cardUpload"); show("cardPreview");
+    };
+    r.readAsDataURL(blob);
+  }, "image/jpeg", 0.92);
+});
+
+function stopCam() {
+  if (mstream) { mstream.getTracks().forEach(function(t){t.stop();}); mstream = null; }
+  document.getElementById("videoBox").style.display = "none";
+  document.getElementById("camBtn").textContent = "📷 카메라로 찍기";
+}
+
+function reset() {
+  if (raf) cancelAnimationFrame(raf);
+  stopCam(); b64 = null;
+  document.getElementById("fileIn").value = "";
+  hide("cardPreview"); hide("cardResult"); hide("cardLoading");
+  show("cardUpload");
+}
+document.getElementById("resetBtn1").addEventListener("click", reset);
+document.getElementById("resetBtn2").addEventListener("click", reset);
+
+document.getElementById("goBtn").addEventListener("click", function() {
+  var key = getKey();
+  if (!key || !key.startsWith("sk-ant-")) {
+    alert("상단에 Anthropic API 키를 먼저 입력해주세요!\n(sk-ant-... 로 시작하는 키)");
+    return;
+  }
+  if (!b64) return;
+  hide("cardPreview"); show("cardLoading");
+
+  fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": key,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true"
+    },
+    body: JSON.stringify({
+      model: "claude-opus-4-5",
+      max_tokens: 500,
+      messages: [{ role: "user", content: [
+        { type: "image", source: { type: "base64", media_type: "image/jpeg", data: b64 } },
+        { type: "text", text: '이 그림을 분석해서 JSON만 응답해. 마크다운 없이 순수 JSON만.\n{"theme":"nature|ocean|space|animals|people|vehicles|fantasy|generic","description":"친근한 한국어 설명 1~2문장","animationType":"bounce|float|sparkle|wave"}' }
+      ]}]
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var raw = data.content[0].text.replace(/```json|```/g,"").trim();
+    var info;
+    try { info = JSON.parse(raw); } catch(e) { info = {}; }
+    showResult(info);
+  })
+  .catch(function(e) {
+    alert("API 오류가 발생했어요: " + e.message);
+    hide("cardLoading"); show("cardPreview");
+  });
+});
+
+function showResult(info) {
+  lastTheme = info.theme || "generic";
+  document.getElementById("resultImg").src = document.getElementById("previewImg").src;
+  document.getElementById("resultImg").style.animation = ANIMS[info.animationType] || ANIMS.sparkle;
+  document.getElementById("descText").textContent = info.description || "멋진 그림이에요! 마법을 걸어줄게요! ✨";
+  hide("cardLoading"); show("cardResult");
+  setTimeout(startParticles, 150);
+}
+
+document.getElementById("reBtn").addEventListener("click", startParticles);
+
+function startParticles() {
+  if (raf) cancelAnimationFrame(raf);
+  var wrap = document.getElementById("animWrap");
+  var cvs = document.getElementById("cvs");
+  cvs.width = wrap.offsetWidth; cvs.height = wrap.offsetHeight;
+  var W = cvs.width, H = cvs.height;
+  var ctx = cvs.getContext("2d");
+  var emojis = EMOJIS[lastTheme] || EMOJIS.generic;
+  var pts = [];
+  for (var i = 0; i < 18; i++) {
+    pts.push({
+      x: Math.random()*W, y: Math.random()*H,
+      em: emojis[Math.floor(Math.random()*emojis.length)],
+      sz: 14+Math.random()*18,
+      vx: (Math.random()-0.5)*1.4,
+      vy: -Math.random()*1.2-0.3,
+      life: Math.random()*Math.PI*2,
+      ls: 0.025+Math.random()*0.025,
+      rot: Math.random()*Math.PI*2,
+      rs: (Math.random()-0.5)*0.05
+    });
+  }
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    for (var j=0;j<pts.length;j++) {
+      var p=pts[j];
+      p.life+=p.ls; p.rot+=p.rs;
+      p.x+=p.vx+Math.sin(p.life)*0.5; p.y+=p.vy;
+      if(p.y<-30){p.y=H+10;p.x=Math.random()*W;}
+      if(p.x<-30)p.x=W+10;
+      if(p.x>W+30)p.x=-10;
+      ctx.save();
+      ctx.globalAlpha=Math.max(0,Math.min(1,0.5+Math.sin(p.life)*0.4));
+      ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.font=p.sz+"px serif";
+      ctx.textAlign="center"; ctx.textBaseline="middle";
+      ctx.fillText(p.em,0,0);
+      ctx.restore();
+    }
+    raf=requestAnimationFrame(draw);
+  }
+  draw();
+}
+</script>
+</body>
+</html>
