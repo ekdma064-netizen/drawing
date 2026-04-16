@@ -10,61 +10,57 @@
 body { font-family: sans-serif; background: #0a0a1a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; color: white; }
 h1 { font-size: 1.7rem; font-weight: 800; background: linear-gradient(90deg,#a78bfa,#60a5fa,#f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin: 8px 0 4px; }
 .sub { color: #888; font-size: 0.9rem; text-align: center; margin-bottom: 20px; }
-.card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 24px; width: 100%; max-width: 580px; margin-bottom: 16px; backdrop-filter: blur(10px); }
-label.upload { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed rgba(167,139,250,0.5); background: rgba(167,139,250,0.05); color: #a78bfa; font-weight: 700; padding: 36px 20px; border-radius: 16px; cursor: pointer; text-align: center; gap: 8px; transition: all 0.3s; }
-label.upload:hover { background: rgba(167,139,250,0.1); border-color: #a78bfa; }
+.card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 24px; width: 100%; max-width: 580px; margin-bottom: 16px; }
+label.upload { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed rgba(167,139,250,0.5); background: rgba(167,139,250,0.05); color: #a78bfa; font-weight: 700; padding: 36px 20px; border-radius: 16px; cursor: pointer; text-align: center; gap: 8px; }
+label.upload:hover { background: rgba(167,139,250,0.1); }
 button { display: block; width: 100%; padding: 14px; border-radius: 12px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
-button:hover { transform: scale(1.02); opacity: 0.9; }
+button:hover { opacity: 0.88; }
 .btn-purple { background: linear-gradient(135deg,#7c3aed,#4f46e5); color: white; }
 .btn-yellow { background: linear-gradient(135deg,#f59e0b,#ef4444); color: white; font-size: 1.1rem; }
 .btn-gray { background: rgba(255,255,255,0.1); color: #aaa; }
 .btn-green { background: linear-gradient(135deg,#10b981,#3b82f6); color: white; }
-#videoBox { display: none; position: relative; margin-top: 12px; border-radius: 12px; overflow: hidden; }
+#videoBox { display: none; position: relative; margin-top: 12px; }
 video { width: 100%; border-radius: 12px; display: block; }
-#snapBtn { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); width: 62px; height: 62px; border-radius: 50%; background: white; border: 4px solid #7c3aed; font-size: 1.5rem; cursor: pointer; margin-top: 0; padding: 0; display: flex; align-items: center; justify-content: center; }
+#snapBtn { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); width: 58px; height: 58px; border-radius: 50%; background: white; border: 4px solid #7c3aed; font-size: 1.5rem; cursor: pointer; margin-top: 0; padding: 0; }
 img.preview { width: 100%; border-radius: 12px; display: block; }
 .spinner-wrap { text-align: center; padding: 30px; }
 .spinner { width: 52px; height: 52px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #a78bfa; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* 3D 뷰어 */
-#threeCanvas { width: 100%; border-radius: 16px; display: block; cursor: grab; }
-#threeCanvas:active { cursor: grabbing; }
-.mode-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
-.mode-tab { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #aaa; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+.mode-tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.mode-tab { flex: 1; min-width: 80px; padding: 10px 6px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #aaa; font-size: 0.82rem; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.2s; }
 .mode-tab.active { background: rgba(167,139,250,0.2); border-color: #a78bfa; color: #a78bfa; }
+.view-area { border-radius: 16px; overflow: hidden; background: #0d0d2b; position: relative; min-height: 320px; }
+#threeCanvas { display: block; width: 100%; height: 340px; cursor: grab; }
+#threeCanvas:active { cursor: grabbing; }
+.float-wrap { min-height: 320px; display: flex; align-items: center; justify-content: center; background: #0d0d2b; border-radius: 16px; overflow: hidden; position: relative; }
+#floatImg { max-width: 65%; border-radius: 12px; position: relative; z-index: 2; animation: floatAnim 3s ease-in-out infinite; filter: drop-shadow(0 0 30px rgba(167,139,250,0.7)); }
+@keyframes floatAnim { 0%,100%{transform:translateY(0) rotateY(0deg)} 33%{transform:translateY(-20px) rotateY(8deg)} 66%{transform:translateY(-12px) rotateY(-5deg)} }
+canvas.overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
+.ar-wrap { position: relative; border-radius: 16px; overflow: hidden; min-height: 320px; background: #111; }
+#arVid { width: 100%; display: block; border-radius: 16px; }
+#arOverlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
 .desc { background: rgba(167,139,250,0.1); border-left: 3px solid #a78bfa; border-radius: 10px; padding: 14px 16px; margin-top: 14px; font-size: 0.9rem; color: #ccc; line-height: 1.6; }
 .hidden { display: none !important; }
-.badge { display: inline-block; background: rgba(167,139,250,0.2); color: #a78bfa; border-radius: 20px; padding: 3px 10px; font-size: 0.75rem; font-weight: 700; margin-bottom: 10px; }
-
-/* AR 오버레이 */
-#arContainer { position: relative; border-radius: 16px; overflow: hidden; }
-#arVideo { width: 100%; border-radius: 16px; display: block; }
-#arCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-
-/* 파티클 캔버스 */
-#particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; border-radius: 16px; }
-.result-wrap { position: relative; }
+.hint { text-align: center; font-size: 0.78rem; color: #555; margin-top: 6px; }
 </style>
 </head>
 <body>
 
 <div style="font-size:2.5rem;text-align:center;margin-top:4px">🎨</div>
 <h1>살아있는 그림</h1>
-<p class="sub">그림이 3D로 살아나요! ✨</p>
+<p class="sub">그림이 3D·AR로 살아나요! ✨</p>
 
 <!-- 업로드 -->
 <div class="card" id="cardUpload">
   <label class="upload" for="fileIn">
     <span style="font-size:2rem">🖼️</span>
     <span>여기를 눌러서 그림을 업로드하세요</span>
-    <span style="font-size:0.8rem;color:#666;font-weight:400">JPG, PNG 등 이미지 파일</span>
+    <span style="font-size:0.8rem;color:#555;font-weight:400">JPG, PNG 등 이미지 파일</span>
     <input type="file" id="fileIn" accept="image/*" style="display:none">
   </label>
-  <button class="btn-purple" id="camBtn">📷 카메라로 찍기 / AR 모드</button>
+  <button class="btn-purple" id="camBtn">📷 카메라로 찍기</button>
   <div id="videoBox">
     <video id="vid" autoplay playsinline muted></video>
-    <canvas id="arCanvas"></canvas>
     <button id="snapBtn">📸</button>
   </div>
 </div>
@@ -80,354 +76,299 @@ img.preview { width: 100%; border-radius: 12px; display: block; }
 <div class="card hidden" id="cardLoading">
   <div class="spinner-wrap">
     <div class="spinner"></div>
-    <p style="color:#888">AI가 그림을 분석하고 3D로 변환 중... 🔍</p>
+    <p style="color:#888">AI가 그림을 분석하는 중... 🔍</p>
   </div>
 </div>
 
 <!-- 결과 -->
 <div class="card hidden" id="cardResult">
-  <div class="badge">✨ 그림이 살아났어요!</div>
-
-  <!-- 모드 탭 -->
   <div class="mode-tabs">
-    <div class="mode-tab active" id="tab3d" onclick="switchMode('3d')">🌐 3D 회전</div>
-    <div class="mode-tab" id="tabFloat" onclick="switchMode('float')">🎈 공중 부양</div>
-    <div class="mode-tab" id="tabAR" onclick="switchMode('ar')">📷 AR 카메라</div>
-    <div class="mode-tab" id="tabParticle" onclick="switchMode('particle')">✨ 파티클</div>
+    <div class="mode-tab active" id="tab3d"     onclick="switchMode('3d')">🌐 3D 회전</div>
+    <div class="mode-tab"        id="tabFloat"  onclick="switchMode('float')">🎈 부양</div>
+    <div class="mode-tab"        id="tabAR"     onclick="switchMode('ar')">📷 AR</div>
+    <div class="mode-tab"        id="tabParticle" onclick="switchMode('particle')">✨ 파티클</div>
   </div>
 
-  <!-- 3D 뷰 -->
-  <div id="view3d" class="result-wrap">
-    <canvas id="threeCanvas" height="340"></canvas>
-    <p style="text-align:center;font-size:0.8rem;color:#555;margin-top:6px">드래그해서 회전 • 핀치/스크롤로 줌</p>
+  <!-- 3D -->
+  <div id="view3d">
+    <canvas id="threeCanvas"></canvas>
+    <p class="hint">드래그로 회전 · 스크롤로 줌</p>
   </div>
 
-  <!-- 공중부양 뷰 -->
-  <div id="viewFloat" class="result-wrap hidden">
-    <div style="position:relative;border-radius:16px;overflow:hidden;background:#0a0a2e;min-height:340px;display:flex;align-items:center;justify-content:center;">
-      <img id="floatImg" style="max-width:70%;border-radius:12px;animation:floatAnim 3s ease-in-out infinite;filter:drop-shadow(0 20px 40px rgba(167,139,250,0.6));">
-      <canvas id="floatParticle" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></canvas>
+  <!-- 부양 -->
+  <div id="viewFloat" class="hidden">
+    <div class="float-wrap" id="floatWrap">
+      <img id="floatImg" alt="부양">
+      <canvas class="overlay" id="floatCvs"></canvas>
     </div>
   </div>
 
-  <!-- AR 카메라 뷰 -->
-  <div id="viewAR" class="result-wrap hidden">
-    <div id="arContainer">
-      <video id="arVid" autoplay playsinline muted style="width:100%;border-radius:16px;display:block;"></video>
-      <canvas id="arOverlay" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></canvas>
+  <!-- AR -->
+  <div id="viewAR" class="hidden">
+    <div class="ar-wrap">
+      <video id="arVid" autoplay playsinline muted></video>
+      <canvas id="arOverlay"></canvas>
     </div>
-    <p style="text-align:center;font-size:0.8rem;color:#555;margin-top:6px">카메라 위에 그림이 떠다녀요!</p>
+    <p class="hint">카메라 위에 그림이 떠다녀요!</p>
   </div>
 
-  <!-- 파티클 뷰 -->
-  <div id="viewParticle" class="result-wrap hidden">
+  <!-- 파티클 -->
+  <div id="viewParticle" class="hidden">
     <div style="position:relative;border-radius:16px;overflow:hidden;">
-      <img id="particleImg" style="width:100%;border-radius:16px;display:block;">
-      <canvas id="mainParticle" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></canvas>
+      <img id="particleImg" style="width:100%;display:block;border-radius:16px;" alt="파티클">
+      <canvas class="overlay" id="particleCvs"></canvas>
     </div>
   </div>
 
   <div class="desc" id="descText"></div>
   <button class="btn-green" id="reBtn" style="margin-top:14px">🔮 다시 마법 걸기</button>
-  <button class="btn-gray" id="resetBtn2">🔄 새 그림 선택</button>
+  <button class="btn-gray"  id="resetBtn2">🔄 새 그림 선택</button>
 </div>
 
-<style>
-@keyframes floatAnim {
-  0%,100% { transform: translateY(0px) rotateY(0deg) scale(1); }
-  25% { transform: translateY(-20px) rotateY(10deg) scale(1.05); }
-  50% { transform: translateY(-30px) rotateY(0deg) scale(1.08); }
-  75% { transform: translateY(-15px) rotateY(-10deg) scale(1.03); }
-}
-</style>
-
 <script>
-var b64=null, imgSrc=null, mstream=null, arStream=null;
-var threeRenderer=null, threeScene=null, threeCamera=null, threeMesh=null;
-var rafIds={float:null,ar:null,particle:null,three:null};
-var currentMode='3d';
-var lastTheme='generic';
+var imgSrc=null, b64=null, mstream=null, arStream=null;
+var rafIds={three:null,float:null,ar:null,particle:null};
+var currentMode='3d', lastTheme='generic';
+var threeRenderer=null;
 
-var EMOJIS={nature:["🌸","🍃","🌺","🦋","🌻","🌿"],ocean:["🐠","🫧","🌊","🐙","🐚","⭐"],space:["⭐","✨","💫","🌟","☄️","🪐"],animals:["🐾","💛","✨","🌟","💕","🎵"],people:["💗","🎵","🌟","✨","🎉","💫"],vehicles:["💨","⭐","✨","💥","🌟","🎆"],fantasy:["✨","💫","🌈","⚡","🔮","🌟"],generic:["✨","⭐","💫","🌟","🎉","🌈"]};
+var EMOJIS={
+  nature:["🌸","🍃","🌺","🦋","🌻","🌿"],
+  ocean:["🐠","🫧","🌊","🐙","🐚","⭐"],
+  space:["⭐","✨","💫","🌟","☄️","🪐"],
+  animals:["🐾","💛","✨","🌟","💕","🎵"],
+  people:["💗","🎵","🌟","✨","🎉","💫"],
+  vehicles:["💨","⭐","✨","💥","🌟","🎆"],
+  fantasy:["✨","💫","🌈","⚡","🔮","🌟"],
+  generic:["✨","⭐","💫","🌟","🎉","🌈"]
+};
 
-function show(id){document.getElementById(id).classList.remove("hidden");}
-function hide(id){document.getElementById(id).classList.add("hidden");}
-
-// 파일 읽기
-document.getElementById("fileIn").addEventListener("change",function(){
-  var file=this.files[0]; if(!file)return;
-  var reader=new FileReader();
-  reader.onload=function(e){
-    imgSrc=e.target.result;
-    b64=e.target.result.split(",")[1];
-    document.getElementById("previewImg").src=imgSrc;
-    hide("cardUpload"); show("cardPreview");
-  };
-  reader.readAsDataURL(file);
-});
-
-// 카메라
-document.getElementById("camBtn").addEventListener("click",function(){
-  if(mstream){stopCam();return;}
-  navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false})
-    .then(function(s){
-      mstream=s;
-      document.getElementById("vid").srcObject=s;
-      document.getElementById("videoBox").style.display="block";
-      document.getElementById("camBtn").textContent="✖ 카메라 닫기";
-    })
-    .catch(function(){alert("카메라를 사용할 수 없어요.\n파일 업로드를 이용해주세요.");});
-});
-
-document.getElementById("snapBtn").addEventListener("click",function(){
-  var v=document.getElementById("vid"),c=document.createElement("canvas");
-  c.width=v.videoWidth||640; c.height=v.videoHeight||480;
-  c.getContext("2d").drawImage(v,0,0);
-  c.toBlob(function(blob){
-    var r=new FileReader();
-    r.onload=function(e){imgSrc=e.target.result;b64=e.target.result.split(",")[1];document.getElementById("previewImg").src=imgSrc;stopCam();hide("cardUpload");show("cardPreview");};
-    r.readAsDataURL(blob);
-  },"image/jpeg",0.92);
-});
-
-function stopCam(){if(mstream){mstream.getTracks().forEach(function(t){t.stop();});mstream=null;}document.getElementById("videoBox").style.display="none";document.getElementById("camBtn").textContent="📷 카메라로 찍기 / AR 모드";}
+function show(id){document.getElementById(id).classList.remove('hidden');}
+function hide(id){document.getElementById(id).classList.add('hidden');}
+function stopAllRafs(){Object.keys(rafIds).forEach(function(k){if(rafIds[k]){cancelAnimationFrame(rafIds[k]);rafIds[k]=null;}});}
 function stopAR(){if(arStream){arStream.getTracks().forEach(function(t){t.stop();});arStream=null;}}
 
-function reset(){
-  stopAllRafs(); stopCam(); stopAR();
-  if(threeRenderer){threeRenderer.dispose();threeRenderer=null;}
-  b64=null;imgSrc=null;
-  document.getElementById("fileIn").value="";
-  hide("cardPreview");hide("cardResult");hide("cardLoading");
-  show("cardUpload");
-}
-document.getElementById("resetBtn1").addEventListener("click",reset);
-document.getElementById("resetBtn2").addEventListener("click",reset);
+// 파일 읽기
+document.getElementById('fileIn').addEventListener('change',function(){
+  var file=this.files[0]; if(!file)return;
+  var r=new FileReader();
+  r.onload=function(e){
+    imgSrc=e.target.result;
+    b64=e.target.result.split(',')[1];
+    document.getElementById('previewImg').src=imgSrc;
+    hide('cardUpload'); show('cardPreview');
+  };
+  r.readAsDataURL(file);
+});
 
-function stopAllRafs(){Object.keys(rafIds).forEach(function(k){if(rafIds[k])cancelAnimationFrame(rafIds[k]);rafIds[k]=null;});}
+// 카메라 촬영
+document.getElementById('camBtn').addEventListener('click',function(){
+  if(mstream){stopMCam();return;}
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
+    .then(function(s){mstream=s;document.getElementById('vid').srcObject=s;document.getElementById('videoBox').style.display='block';document.getElementById('camBtn').textContent='✖ 닫기';})
+    .catch(function(){alert('카메라를 사용할 수 없어요. 파일 업로드를 이용해주세요.');});
+});
+document.getElementById('snapBtn').addEventListener('click',function(){
+  var v=document.getElementById('vid'),c=document.createElement('canvas');
+  c.width=v.videoWidth||640;c.height=v.videoHeight||480;
+  c.getContext('2d').drawImage(v,0,0);
+  c.toBlob(function(blob){var r=new FileReader();r.onload=function(e){imgSrc=e.target.result;b64=e.target.result.split(',')[1];document.getElementById('previewImg').src=imgSrc;stopMCam();hide('cardUpload');show('cardPreview');};r.readAsDataURL(blob);},'image/jpeg',0.92);
+});
+function stopMCam(){if(mstream){mstream.getTracks().forEach(function(t){t.stop();});mstream=null;}document.getElementById('videoBox').style.display='none';document.getElementById('camBtn').textContent='📷 카메라로 찍기';}
 
-// 분석
-document.getElementById("goBtn").addEventListener("click",function(){
+function reset(){stopAllRafs();stopMCam();stopAR();if(threeRenderer){threeRenderer.dispose();threeRenderer=null;}b64=null;imgSrc=null;document.getElementById('fileIn').value='';hide('cardPreview');hide('cardResult');hide('cardLoading');show('cardUpload');}
+document.getElementById('resetBtn1').addEventListener('click',reset);
+document.getElementById('resetBtn2').addEventListener('click',reset);
+
+// AI 분석
+document.getElementById('goBtn').addEventListener('click',function(){
   if(!b64)return;
-  hide("cardPreview"); show("cardLoading");
-  fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({image:b64})})
+  hide('cardPreview');show('cardLoading');
+  fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b64})})
     .then(function(r){return r.json();})
     .then(function(info){showResult(info);})
-    .catch(function(){showResult({theme:"generic",description:"멋진 그림이에요! ✨",animationType:"sparkle"});});
+    .catch(function(){showResult({theme:'generic',description:'멋진 그림이에요! ✨',animationType:'sparkle'});});
 });
 
-document.getElementById("reBtn").addEventListener("click",function(){
-  stopAllRafs(); stopAR();
-  switchMode(currentMode);
-});
+document.getElementById('reBtn').addEventListener('click',function(){stopAllRafs();stopAR();switchMode(currentMode);});
 
 function showResult(info){
-  lastTheme=info.theme||"generic";
-  document.getElementById("descText").textContent=info.description||"멋진 그림이에요! ✨";
-  document.getElementById("floatImg").src=imgSrc;
-  document.getElementById("particleImg").src=imgSrc;
-  hide("cardLoading"); show("cardResult");
-  setTimeout(function(){switchMode('3d');},200);
+  lastTheme=info.theme||'generic';
+  document.getElementById('descText').textContent=info.description||'멋진 그림이에요! ✨';
+  document.getElementById('floatImg').src=imgSrc;
+  document.getElementById('particleImg').src=imgSrc;
+  hide('cardLoading');show('cardResult');
+  setTimeout(function(){switchMode('3d');},100);
 }
 
 // 모드 전환
+var MODES=['3d','Float','AR','Particle'];
 function switchMode(mode){
   currentMode=mode;
-  stopAllRafs(); stopAR();
-  ['3d','float','ar','particle'].forEach(function(m){
-    document.getElementById('view'+(m.charAt(0).toUpperCase()+m.slice(1))).classList.add('hidden');
-    document.getElementById('tab'+(m.charAt(0).toUpperCase()+m.slice(1))).classList.remove('active');
+  stopAllRafs();stopAR();
+  MODES.forEach(function(m){
+    document.getElementById('view'+m).classList.add('hidden');
+    document.getElementById('tab'+m).classList.remove('active');
   });
   show('view'+mode.charAt(0).toUpperCase()+mode.slice(1));
   document.getElementById('tab'+mode.charAt(0).toUpperCase()+mode.slice(1)).classList.add('active');
-
-  if(mode==='3d') init3D();
-  else if(mode==='float') initFloat();
+  if(mode==='3d') setTimeout(init3D,50);
+  else if(mode==='float') setTimeout(initFloat,50);
   else if(mode==='ar') initAR();
-  else if(mode==='particle') initParticle(document.getElementById('mainParticle'), document.getElementById('particleImg'));
+  else if(mode==='particle') setTimeout(initParticle,50);
 }
 
-// ── 3D 모드 (Three.js) ──
+// ── 3D (Three.js) ──
 function init3D(){
   var canvas=document.getElementById('threeCanvas');
-  var w=canvas.offsetWidth||560, h=340;
-  canvas.width=w; canvas.height=h;
+  var W=canvas.parentElement.offsetWidth||540;
+  var H=340;
+  canvas.width=W; canvas.height=H;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
 
-  if(threeRenderer) threeRenderer.dispose();
-  threeRenderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
-  threeRenderer.setSize(w,h);
-  threeRenderer.setClearColor(0x0a0a1a,1);
+  if(threeRenderer){threeRenderer.dispose();threeRenderer=null;}
+  threeRenderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:false});
+  threeRenderer.setPixelRatio(window.devicePixelRatio||1);
+  threeRenderer.setSize(W,H);
+  threeRenderer.setClearColor(0x0d0d2b,1);
 
-  threeScene=new THREE.Scene();
-  threeCamera=new THREE.PerspectiveCamera(45,w/h,0.1,100);
-  threeCamera.position.set(0,0,3);
+  var scene=new THREE.Scene();
+  var camera=new THREE.PerspectiveCamera(50,W/H,0.1,100);
+  camera.position.z=2.8;
 
-  // 조명
-  threeScene.add(new THREE.AmbientLight(0xffffff,0.6));
-  var dLight=new THREE.DirectionalLight(0xa78bfa,1.2);
-  dLight.position.set(2,3,4); threeScene.add(dLight);
-  var dLight2=new THREE.DirectionalLight(0x60a5fa,0.8);
-  dLight2.position.set(-2,-1,2); threeScene.add(dLight2);
+  scene.add(new THREE.AmbientLight(0xffffff,0.7));
+  var dl=new THREE.DirectionalLight(0xa78bfa,1.5); dl.position.set(3,3,5); scene.add(dl);
+  var dl2=new THREE.DirectionalLight(0x60a5fa,0.8); dl2.position.set(-3,-2,2); scene.add(dl2);
 
-  // 텍스처로 그림 로드
-  var tex=new THREE.TextureLoader().load(imgSrc);
-  var geo=new THREE.BoxGeometry(2.4,1.8,0.12);
-  var mats=[
-    new THREE.MeshPhongMaterial({color:0x6d28d9}),
-    new THREE.MeshPhongMaterial({color:0x6d28d9}),
-    new THREE.MeshPhongMaterial({color:0x6d28d9}),
-    new THREE.MeshPhongMaterial({color:0x6d28d9}),
-    new THREE.MeshPhongMaterial({map:tex}),
-    new THREE.MeshPhongMaterial({color:0x4c1d95})
-  ];
-  threeMesh=new THREE.Mesh(geo,mats);
-  threeScene.add(threeMesh);
-
-  // 파티클 배경
-  var pGeo=new THREE.BufferGeometry();
-  var pPos=[];
-  for(var i=0;i<200;i++){pPos.push((Math.random()-0.5)*10,(Math.random()-0.5)*10,(Math.random()-0.5)*10);}
-  pGeo.setAttribute('position',new THREE.Float32BufferAttribute(pPos,3));
-  var pMat=new THREE.PointsMaterial({color:0xa78bfa,size:0.04});
-  threeScene.add(new THREE.Points(pGeo,pMat));
-
-  // 마우스/터치 드래그
-  var drag={active:false,prevX:0,prevY:0};
-  canvas.addEventListener('mousedown',function(e){drag.active=true;drag.prevX=e.clientX;drag.prevY=e.clientY;});
-  window.addEventListener('mouseup',function(){drag.active=false;});
-  window.addEventListener('mousemove',function(e){
-    if(!drag.active)return;
-    threeMesh.rotation.y+=(e.clientX-drag.prevX)*0.01;
-    threeMesh.rotation.x+=(e.clientY-drag.prevY)*0.01;
-    drag.prevX=e.clientX; drag.prevY=e.clientY;
+  // 이미지를 텍스처로 로드
+  var loader=new THREE.TextureLoader();
+  loader.crossOrigin='anonymous';
+  var tex=loader.load(imgSrc, function(){
+    // 텍스처 로드 완료 후 렌더 시작
   });
-  canvas.addEventListener('touchstart',function(e){drag.active=true;drag.prevX=e.touches[0].clientX;drag.prevY=e.touches[0].clientY;},{passive:true});
-  window.addEventListener('touchend',function(){drag.active=false;});
-  window.addEventListener('touchmove',function(e){
-    if(!drag.active)return;
-    threeMesh.rotation.y+=(e.touches[0].clientX-drag.prevX)*0.012;
-    threeMesh.rotation.x+=(e.touches[0].clientY-drag.prevY)*0.012;
-    drag.prevX=e.touches[0].clientX; drag.prevY=e.touches[0].clientY;
-  },{passive:true});
+  tex.minFilter=THREE.LinearFilter;
 
-  // 줌
-  canvas.addEventListener('wheel',function(e){threeCamera.position.z=Math.max(1,Math.min(6,threeCamera.position.z+e.deltaY*0.005));});
+  var geo=new THREE.BoxGeometry(2.2,1.65,0.1);
+  var purple=new THREE.MeshPhongMaterial({color:0x5b21b6});
+  var front=new THREE.MeshPhongMaterial({map:tex});
+  // 앞면(index 4)에 이미지, 나머지는 보라색
+  var mesh=new THREE.Mesh(geo,[purple,purple,purple,purple,front,purple]);
+  scene.add(mesh);
+
+  // 별 파티클
+  var pGeo=new THREE.BufferGeometry();
+  var pos=[];
+  for(var i=0;i<300;i++){pos.push((Math.random()-0.5)*12,(Math.random()-0.5)*12,(Math.random()-0.5)*8);}
+  pGeo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+  scene.add(new THREE.Points(pGeo,new THREE.PointsMaterial({color:0xffffff,size:0.03,transparent:true,opacity:0.6})));
+
+  // 드래그 회전
+  var drag={on:false,x:0,y:0};
+  canvas.addEventListener('mousedown',function(e){drag.on=true;drag.x=e.clientX;drag.y=e.clientY;});
+  window.addEventListener('mouseup',function(){drag.on=false;});
+  window.addEventListener('mousemove',function(e){if(!drag.on)return;mesh.rotation.y+=(e.clientX-drag.x)*0.012;mesh.rotation.x+=(e.clientY-drag.y)*0.012;drag.x=e.clientX;drag.y=e.clientY;});
+  canvas.addEventListener('touchstart',function(e){drag.on=true;drag.x=e.touches[0].clientX;drag.y=e.touches[0].clientY;},{passive:true});
+  window.addEventListener('touchend',function(){drag.on=false;});
+  window.addEventListener('touchmove',function(e){if(!drag.on)return;mesh.rotation.y+=(e.touches[0].clientX-drag.x)*0.014;mesh.rotation.x+=(e.touches[0].clientY-drag.y)*0.014;drag.x=e.touches[0].clientX;drag.y=e.touches[0].clientY;},{passive:true});
+  canvas.addEventListener('wheel',function(e){camera.position.z=Math.max(1.2,Math.min(6,camera.position.z+e.deltaY*0.005));});
 
   var t=0;
-  function animate(){
-    rafIds.three=requestAnimationFrame(animate);
-    if(!drag.active){threeMesh.rotation.y+=0.008;threeMesh.rotation.x=Math.sin(t)*0.15;}
+  function loop(){
+    rafIds.three=requestAnimationFrame(loop);
     t+=0.02;
-    threeRenderer.render(threeScene,threeCamera);
+    if(!drag.on){mesh.rotation.y+=0.007;mesh.rotation.x=Math.sin(t)*0.12;}
+    threeRenderer.render(scene,camera);
   }
-  animate();
+  loop();
 }
 
-// ── 공중부양 모드 ──
+// ── 공중 부양 ──
 function initFloat(){
-  var cvs=document.getElementById('floatParticle');
-  var wrap=cvs.parentElement;
-  cvs.width=wrap.offsetWidth||560;
-  cvs.height=wrap.offsetHeight||340;
+  var cvs=document.getElementById('floatCvs');
+  var wrap=document.getElementById('floatWrap');
+  cvs.width=wrap.offsetWidth||540;
+  cvs.height=wrap.offsetHeight||320;
   var W=cvs.width,H=cvs.height,ctx=cvs.getContext('2d');
   var emojis=EMOJIS[lastTheme]||EMOJIS.generic;
-  var stars=Array.from({length:80},function(){return{x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+0.3,alpha:Math.random(),speed:Math.random()*0.5+0.2};});
-  var pts=Array.from({length:25},function(){return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:12+Math.random()*16,vx:(Math.random()-0.5)*0.8,vy:-Math.random()*0.6-0.2,life:Math.random()*Math.PI*2,ls:0.02+Math.random()*0.02};});
-  function draw(){
+  var stars=Array.from({length:100},function(){return{x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+0.3,a:Math.random(),s:Math.random()*0.008+0.003};});
+  var pts=Array.from({length:20},function(){return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:12+Math.random()*14,vx:(Math.random()-0.5)*0.7,vy:-Math.random()*0.5-0.15,life:Math.random()*Math.PI*2,ls:0.022};});
+  function loop(){
     ctx.clearRect(0,0,W,H);
-    // 별
-    stars.forEach(function(s){s.alpha+=s.speed*0.02;if(s.alpha>1)s.alpha=0;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+s.alpha+')';ctx.fill();});
-    // 이모지
-    pts.forEach(function(p){p.life+=p.ls;p.x+=p.vx+Math.sin(p.life)*0.3;p.y+=p.vy;if(p.y<-30){p.y=H+10;p.x=Math.random()*W;}if(p.x<-30)p.x=W+10;if(p.x>W+30)p.x=-10;ctx.save();ctx.globalAlpha=0.5+Math.sin(p.life)*0.4;ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.em,p.x,p.y);ctx.restore();});
-    rafIds.float=requestAnimationFrame(draw);
+    stars.forEach(function(s){s.a+=s.s;if(s.a>1)s.a=0;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+s.a.toFixed(2)+')';ctx.fill();});
+    pts.forEach(function(p){p.life+=p.ls;p.x+=p.vx+Math.sin(p.life)*0.3;p.y+=p.vy;if(p.y<-30){p.y=H+10;p.x=Math.random()*W;}if(p.x<0)p.x=W;if(p.x>W)p.x=0;ctx.save();ctx.globalAlpha=Math.max(0,0.5+Math.sin(p.life)*0.4);ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.em,p.x,p.y);ctx.restore();});
+    rafIds.float=requestAnimationFrame(loop);
   }
-  draw();
+  loop();
 }
 
-// ── AR 카메라 모드 ──
+// ── AR 카메라 ──
 function initAR(){
   var vid=document.getElementById('arVid');
   var cvs=document.getElementById('arOverlay');
-  navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false})
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
     .then(function(s){
-      arStream=s; vid.srcObject=s;
-      vid.onloadedmetadata=function(){
-        cvs.width=vid.videoWidth||640;
-        cvs.height=vid.videoHeight||480;
+      arStream=s;
+      vid.srcObject=s;
+      vid.play();
+      vid.addEventListener('loadedmetadata',function(){
+        var W=vid.videoWidth||640, H=vid.videoHeight||480;
+        cvs.width=W; cvs.height=H;
+        cvs.style.width='100%'; cvs.style.height='100%';
         var ctx=cvs.getContext('2d');
-        var img=new Image(); img.src=imgSrc;
         var emojis=EMOJIS[lastTheme]||EMOJIS.generic;
-        var t=0;
-        // 여러 이미지 복사본이 떠다님
-        var copies=Array.from({length:3},function(v,i){return{x:100+i*150,y:100+i*60,vx:(Math.random()-0.5)*1.5,vy:(Math.random()-0.5)*1.5,rot:0,rotS:(Math.random()-0.5)*0.03,scale:0.25+Math.random()*0.15};});
-        var pts=Array.from({length:20},function(){return{x:Math.random()*640,y:Math.random()*480,em:emojis[Math.floor(Math.random()*emojis.length)],sz:16+Math.random()*14,vx:(Math.random()-0.5)*1.2,vy:-Math.random()*0.8-0.2,life:Math.random()*Math.PI*2,ls:0.025+Math.random()*0.02};});
-        function drawAR(){
-          var W=cvs.width,H=cvs.height;
+        var drawImg=new Image();
+        drawImg.crossOrigin='anonymous';
+        drawImg.src=imgSrc;
+        var copies=Array.from({length:3},function(_,i){return{x:80+i*180,y:80+i*80,vx:(Math.random()-0.5)*1.8,vy:(Math.random()-0.5)*1.2,rot:0,rs:(Math.random()-0.5)*0.025,s:0.22+i*0.06};});
+        var pts=Array.from({length:18},function(){return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:16+Math.random()*12,vx:(Math.random()-0.5)*1.2,vy:-Math.random()*0.8-0.2,life:Math.random()*Math.PI*2,ls:0.025};});
+        function loop(){
           ctx.clearRect(0,0,W,H);
-          t+=0.03;
-          // 글로우 링
           copies.forEach(function(c){
-            c.x+=c.vx+Math.sin(t+c.rot)*0.5; c.y+=c.vy+Math.cos(t+c.rot)*0.5; c.rot+=c.rotS;
-            if(c.x<0||c.x>W)c.vx*=-1; if(c.y<0||c.y>H)c.vy*=-1;
-            var iw=img.naturalWidth*c.scale, ih=img.naturalHeight*c.scale;
-            ctx.save();
-            ctx.translate(c.x,c.y); ctx.rotate(c.rot);
-            ctx.shadowBlur=20; ctx.shadowColor='rgba(167,139,250,0.8)';
-            ctx.globalAlpha=0.85;
-            ctx.drawImage(img,-iw/2,-ih/2,iw,ih);
-            ctx.restore();
+            c.x+=c.vx; c.y+=c.vy; c.rot+=c.rs;
+            if(c.x<0||c.x>W)c.vx*=-1;
+            if(c.y<0||c.y>H)c.vy*=-1;
+            if(drawImg.complete&&drawImg.naturalWidth>0){
+              var iw=drawImg.naturalWidth*c.s, ih=drawImg.naturalHeight*c.s;
+              ctx.save();
+              ctx.translate(c.x,c.y); ctx.rotate(c.rot);
+              ctx.shadowBlur=24; ctx.shadowColor='rgba(167,139,250,0.9)';
+              ctx.globalAlpha=0.88;
+              ctx.drawImage(drawImg,-iw/2,-ih/2,iw,ih);
+              ctx.restore();
+            }
           });
-          // 이모지
-          pts.forEach(function(p){p.life+=p.ls;p.x+=p.vx+Math.sin(p.life)*0.4;p.y+=p.vy;if(p.y<-30){p.y=H+10;p.x=Math.random()*W;}if(p.x<-30)p.x=W+10;if(p.x>W+30)p.x=-10;ctx.save();ctx.globalAlpha=0.6+Math.sin(p.life)*0.35;ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.em,p.x,p.y);ctx.restore();});
-          rafIds.ar=requestAnimationFrame(drawAR);
+          pts.forEach(function(p){p.life+=p.ls;p.x+=p.vx+Math.sin(p.life)*0.4;p.y+=p.vy;if(p.y<-30){p.y=H+10;p.x=Math.random()*W;}if(p.x<0)p.x=W;if(p.x>W)p.x=0;ctx.save();ctx.globalAlpha=Math.max(0,0.55+Math.sin(p.life)*0.4);ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.em,p.x,p.y);ctx.restore();});
+          rafIds.ar=requestAnimationFrame(loop);
         }
-        img.onload=function(){drawAR();};
-        if(img.complete)drawAR();
-      };
+        loop();
+      });
     })
     .catch(function(){
-      document.getElementById('viewAR').innerHTML='<div style="text-align:center;padding:40px;color:#888">카메라 권한이 없어요 😅<br>다른 모드를 이용해주세요!</div>';
+      document.getElementById('viewAR').innerHTML='<div style="text-align:center;padding:40px;color:#666;font-size:0.95rem">📵 카메라 권한이 없어요<br><br>브라우저 주소창 옆 자물쇠 아이콘을 눌러<br>카메라 권한을 허용해주세요!</div>';
     });
 }
 
-// ── 파티클 모드 ──
-function initParticle(cvs, imgEl){
-  var wrap=cvs.parentElement;
-  cvs.width=imgEl.offsetWidth||560;
-  cvs.height=imgEl.offsetHeight||340;
-  var W=cvs.width,H=cvs.height,ctx=cvs.getContext('2d');
-  var emojis=EMOJIS[lastTheme]||EMOJIS.generic;
-  // 여러 레이어 파티클
-  var layers=[
-    Array.from({length:30},function(){return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:8+Math.random()*10,vx:(Math.random()-0.5)*0.6,vy:-Math.random()*0.5-0.1,life:Math.random()*Math.PI*2,ls:0.015};}),
-    Array.from({length:20},function(){return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:16+Math.random()*14,vx:(Math.random()-0.5)*1.2,vy:-Math.random()*0.8-0.2,life:Math.random()*Math.PI*2,ls:0.03};}),
-    Array.from({length:40},function(){return{x:Math.random()*W,y:Math.random()*H,r:Math.random()*3+1,vx:(Math.random()-0.5)*0.4,vy:-Math.random()*0.3,alpha:Math.random(),life:Math.random()*Math.PI*2,ls:0.02,isGlow:true};})
-  ];
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    layers.forEach(function(layer){
-      layer.forEach(function(p){
-        p.life+=p.ls; p.x+=p.vx+Math.sin(p.life)*0.3; p.y+=p.vy;
-        if(p.y<-30){p.y=H+10;p.x=Math.random()*W;}
-        if(p.x<-30)p.x=W+10; if(p.x>W+30)p.x=-10;
-        ctx.save();
-        if(p.isGlow){
-          ctx.globalAlpha=0.3+Math.sin(p.life)*0.3;
-          ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-          ctx.fillStyle='rgba(167,139,250,0.8)'; ctx.fill();
-        } else {
-          ctx.globalAlpha=0.5+Math.sin(p.life)*0.4;
-          ctx.font=p.sz+'px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
-          ctx.fillText(p.em,p.x,p.y);
-        }
-        ctx.restore();
-      });
-    });
-    rafIds.particle=requestAnimationFrame(draw);
+// ── 파티클 ──
+function initParticle(){
+  var img=document.getElementById('particleImg');
+  var cvs=document.getElementById('particleCvs');
+  function start(){
+    var W=img.offsetWidth||540, H=img.offsetHeight||320;
+    cvs.width=W; cvs.height=H;
+    var ctx=cvs.getContext('2d');
+    var emojis=EMOJIS[lastTheme]||EMOJIS.generic;
+    var big=Array.from({length:18},function(){return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:16+Math.random()*16,vx:(Math.random()-0.5)*1.2,vy:-Math.random()*0.8-0.2,life:Math.random()*Math.PI*2,ls:0.025};});
+    var small=Array.from({length:30},function(){return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:8+Math.random()*8,vx:(Math.random()-0.5)*0.6,vy:-Math.random()*0.4-0.1,life:Math.random()*Math.PI*2,ls:0.015};});
+    var glows=Array.from({length:50},function(){return{x:Math.random()*W,y:Math.random()*H,r:Math.random()*4+1,vx:(Math.random()-0.5)*0.4,vy:-Math.random()*0.3,life:Math.random()*Math.PI*2,ls:0.018};});
+    function loop(){
+      ctx.clearRect(0,0,W,H);
+      glows.forEach(function(p){p.life+=p.ls;p.x+=p.vx;p.y+=p.vy;if(p.y<-10){p.y=H+5;p.x=Math.random()*W;}if(p.x<0)p.x=W;if(p.x>W)p.x=0;ctx.save();ctx.globalAlpha=Math.max(0,0.25+Math.sin(p.life)*0.25);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(167,139,250,1)';ctx.fill();ctx.restore();});
+      [big,small].forEach(function(layer){layer.forEach(function(p){p.life+=p.ls;p.x+=p.vx+Math.sin(p.life)*0.3;p.y+=p.vy;if(p.y<-30){p.y=H+10;p.x=Math.random()*W;}if(p.x<0)p.x=W;if(p.x>W)p.x=0;ctx.save();ctx.globalAlpha=Math.max(0,0.5+Math.sin(p.life)*0.4);ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.em,p.x,p.y);ctx.restore();});});
+      rafIds.particle=requestAnimationFrame(loop);
+    }
+    loop();
   }
-  draw();
-  // 이미지 로드 후 캔버스 크기 재조정
-  imgEl.onload=function(){cvs.width=imgEl.offsetWidth;cvs.height=imgEl.offsetHeight;W=cvs.width;H=cvs.height;};
+  if(img.complete&&img.naturalWidth>0) start();
+  else img.onload=start;
 }
 </script>
 </body>
