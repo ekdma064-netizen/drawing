@@ -27,35 +27,35 @@ img.preview { width: 100%; border-radius: 12px; display: block; }
 .spinner { width: 52px; height: 52px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #a78bfa; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .mode-tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-.mode-tab { flex: 1; min-width: 80px; padding: 10px 6px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #aaa; font-size: 0.82rem; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.2s; }
+.mode-tab { flex: 1; min-width: 70px; padding: 10px 4px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: #aaa; font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.2s; }
 .mode-tab.active { background: rgba(167,139,250,0.2); border-color: #a78bfa; color: #a78bfa; }
-.view-area { border-radius: 16px; overflow: hidden; background: #0d0d2b; position: relative; min-height: 320px; }
-#threeCanvas { display: block; width: 100%; height: 340px; cursor: grab; }
-#threeCanvas:active { cursor: grabbing; }
+#threeCanvas { display: block; width: 100%; height: 340px; cursor: grab; border-radius: 16px; }
 .float-wrap { min-height: 320px; display: flex; align-items: center; justify-content: center; background: #0d0d2b; border-radius: 16px; overflow: hidden; position: relative; }
 #floatImg { max-width: 65%; border-radius: 12px; position: relative; z-index: 2; animation: floatAnim 3s ease-in-out infinite; filter: drop-shadow(0 0 30px rgba(167,139,250,0.7)); }
 @keyframes floatAnim { 0%,100%{transform:translateY(0) rotateY(0deg)} 33%{transform:translateY(-20px) rotateY(8deg)} 66%{transform:translateY(-12px) rotateY(-5deg)} }
-canvas.overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
-.ar-wrap { position: relative; border-radius: 16px; overflow: hidden; min-height: 320px; background: #111; }
-#arVid { width: 100%; display: block; border-radius: 16px; }
+canvas.overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; border-radius: 16px; }
+.ar-wrap { position: relative; border-radius: 16px; overflow: hidden; background: #111; }
+#arVid { width: 100%; display: block; }
 #arOverlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
 .desc { background: rgba(167,139,250,0.1); border-left: 3px solid #a78bfa; border-radius: 10px; padding: 14px 16px; margin-top: 14px; font-size: 0.9rem; color: #ccc; line-height: 1.6; }
 .hidden { display: none !important; }
 .hint { text-align: center; font-size: 0.78rem; color: #555; margin-top: 6px; }
+.subject-preview { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.subject-preview img { height: 60px; border-radius: 8px; background: repeating-conic-gradient(#333 0% 25%, #222 0% 50%) 0 0/10px 10px; }
 </style>
 </head>
 <body>
 
 <div style="font-size:2.5rem;text-align:center;margin-top:4px">🎨</div>
 <h1>살아있는 그림</h1>
-<p class="sub">그림이 3D·AR로 살아나요! ✨</p>
+<p class="sub">피사체가 AR로 튀어나와요! ✨</p>
 
 <!-- 업로드 -->
 <div class="card" id="cardUpload">
   <label class="upload" for="fileIn">
     <span style="font-size:2rem">🖼️</span>
     <span>여기를 눌러서 그림을 업로드하세요</span>
-    <span style="font-size:0.8rem;color:#555;font-weight:400">JPG, PNG 등 이미지 파일</span>
+    <span style="font-size:0.8rem;color:#555;font-weight:400">하얀/밝은 배경의 그림이 가장 잘 돼요!</span>
     <input type="file" id="fileIn" accept="image/*" style="display:none">
   </label>
   <button class="btn-purple" id="camBtn">📷 카메라로 찍기</button>
@@ -68,7 +68,7 @@ canvas.overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%;
 <!-- 미리보기 -->
 <div class="card hidden" id="cardPreview">
   <img class="preview" id="previewImg" alt="미리보기">
-  <button class="btn-yellow" id="goBtn">✨ 3D로 살려줘!</button>
+  <button class="btn-yellow" id="goBtn">✨ 피사체를 꺼내줘!</button>
   <button class="btn-gray" id="resetBtn1">🔄 다시 선택</button>
 </div>
 
@@ -76,16 +76,16 @@ canvas.overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%;
 <div class="card hidden" id="cardLoading">
   <div class="spinner-wrap">
     <div class="spinner"></div>
-    <p style="color:#888">AI가 그림을 분석하는 중... 🔍</p>
+    <p id="loadingText" style="color:#888">AI가 그림을 분석하는 중... 🔍</p>
   </div>
 </div>
 
 <!-- 결과 -->
 <div class="card hidden" id="cardResult">
   <div class="mode-tabs">
-    <div class="mode-tab active" id="tab3d"     onclick="switchMode('3d')">🌐 3D 회전</div>
-    <div class="mode-tab"        id="tabFloat"  onclick="switchMode('float')">🎈 부양</div>
-    <div class="mode-tab"        id="tabAR"     onclick="switchMode('ar')">📷 AR</div>
+    <div class="mode-tab active" id="tab3d"       onclick="switchMode('3d')">🌐 3D</div>
+    <div class="mode-tab"        id="tabFloat"    onclick="switchMode('float')">🎈 부양</div>
+    <div class="mode-tab"        id="tabAR"       onclick="switchMode('ar')">📷 AR</div>
     <div class="mode-tab"        id="tabParticle" onclick="switchMode('particle')">✨ 파티클</div>
   </div>
 
@@ -103,19 +103,19 @@ canvas.overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     </div>
   </div>
 
-  <!-- AR -->
+  <!-- AR — 피사체가 카메라 위에서 움직임 -->
   <div id="viewAR" class="hidden">
-    <div class="ar-wrap">
+    <div class="ar-wrap" id="arWrap">
       <video id="arVid" autoplay playsinline muted></video>
       <canvas id="arOverlay"></canvas>
     </div>
-    <p class="hint">카메라 위에 그림이 떠다녀요!</p>
+    <p class="hint">피사체가 카메라 위에서 걸어다녀요! 📷</p>
   </div>
 
   <!-- 파티클 -->
   <div id="viewParticle" class="hidden">
     <div style="position:relative;border-radius:16px;overflow:hidden;">
-      <img id="particleImg" style="width:100%;display:block;border-radius:16px;" alt="파티클">
+      <img id="particleImg" style="width:100%;display:block;border-radius:16px;" alt="">
       <canvas class="overlay" id="particleCvs"></canvas>
     </div>
   </div>
@@ -130,17 +130,10 @@ var imgSrc=null, b64=null, mstream=null, arStream=null;
 var rafIds={three:null,float:null,ar:null,particle:null};
 var currentMode='3d', lastTheme='generic';
 var threeRenderer=null;
+// 배경 제거된 피사체 캔버스들
+var subjectCanvases=[];
 
-var EMOJIS={
-  nature:["🌸","🍃","🌺","🦋","🌻","🌿"],
-  ocean:["🐠","🫧","🌊","🐙","🐚","⭐"],
-  space:["⭐","✨","💫","🌟","☄️","🪐"],
-  animals:["🐾","💛","✨","🌟","💕","🎵"],
-  people:["💗","🎵","🌟","✨","🎉","💫"],
-  vehicles:["💨","⭐","✨","💥","🌟","🎆"],
-  fantasy:["✨","💫","🌈","⚡","🔮","🌟"],
-  generic:["✨","⭐","💫","🌟","🎉","🌈"]
-};
+var EMOJIS={nature:["🌸","🍃","🌺","🦋","🌻","🌿"],ocean:["🐠","🫧","🌊","🐙","🐚","⭐"],space:["⭐","✨","💫","🌟","☄️","🪐"],animals:["🐾","💛","✨","🌟","💕","🎵"],people:["💗","🎵","🌟","✨","🎉","💫"],vehicles:["💨","⭐","✨","💥","🌟","🎆"],fantasy:["✨","💫","🌈","⚡","🔮","🌟"],generic:["✨","⭐","💫","🌟","🎉","🌈"]};
 
 function show(id){document.getElementById(id).classList.remove('hidden');}
 function hide(id){document.getElementById(id).classList.add('hidden');}
@@ -149,18 +142,12 @@ function stopAR(){if(arStream){arStream.getTracks().forEach(function(t){t.stop()
 
 // 파일 읽기
 document.getElementById('fileIn').addEventListener('change',function(){
-  var file=this.files[0]; if(!file)return;
+  var file=this.files[0];if(!file)return;
   var r=new FileReader();
-  r.onload=function(e){
-    imgSrc=e.target.result;
-    b64=e.target.result.split(',')[1];
-    document.getElementById('previewImg').src=imgSrc;
-    hide('cardUpload'); show('cardPreview');
-  };
+  r.onload=function(e){imgSrc=e.target.result;b64=e.target.result.split(',')[1];document.getElementById('previewImg').src=imgSrc;hide('cardUpload');show('cardPreview');};
   r.readAsDataURL(file);
 });
 
-// 카메라 촬영
 document.getElementById('camBtn').addEventListener('click',function(){
   if(mstream){stopMCam();return;}
   navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
@@ -175,93 +162,190 @@ document.getElementById('snapBtn').addEventListener('click',function(){
 });
 function stopMCam(){if(mstream){mstream.getTracks().forEach(function(t){t.stop();});mstream=null;}document.getElementById('videoBox').style.display='none';document.getElementById('camBtn').textContent='📷 카메라로 찍기';}
 
-function reset(){stopAllRafs();stopMCam();stopAR();if(threeRenderer){threeRenderer.dispose();threeRenderer=null;}b64=null;imgSrc=null;document.getElementById('fileIn').value='';hide('cardPreview');hide('cardResult');hide('cardLoading');show('cardUpload');}
+function reset(){stopAllRafs();stopMCam();stopAR();if(threeRenderer){threeRenderer.dispose();threeRenderer=null;}subjectCanvases=[];b64=null;imgSrc=null;document.getElementById('fileIn').value='';hide('cardPreview');hide('cardResult');hide('cardLoading');show('cardUpload');}
 document.getElementById('resetBtn1').addEventListener('click',reset);
 document.getElementById('resetBtn2').addEventListener('click',reset);
-
-// AI 분석
-document.getElementById('goBtn').addEventListener('click',function(){
-  if(!b64)return;
-  hide('cardPreview');show('cardLoading');
-  fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b64})})
-    .then(function(r){return r.json();})
-    .then(function(info){showResult(info);})
-    .catch(function(){showResult({theme:'generic',description:'멋진 그림이에요! ✨',animationType:'sparkle'});});
-});
-
 document.getElementById('reBtn').addEventListener('click',function(){stopAllRafs();stopAR();switchMode(currentMode);});
 
-function showResult(info){
-  lastTheme=info.theme||'generic';
-  document.getElementById('descText').textContent=info.description||'멋진 그림이에요! ✨';
-  document.getElementById('floatImg').src=imgSrc;
-  document.getElementById('particleImg').src=imgSrc;
-  hide('cardLoading');show('cardResult');
-  setTimeout(function(){switchMode('3d');},100);
+// ── 배경 제거 (Canvas 픽셀 분석) ──
+function removeBackground(imgEl, tolerance) {
+  tolerance = tolerance || 40;
+  var c = document.createElement('canvas');
+  c.width = imgEl.naturalWidth;
+  c.height = imgEl.naturalHeight;
+  var ctx = c.getContext('2d');
+  ctx.drawImage(imgEl, 0, 0);
+  var data = ctx.getImageData(0, 0, c.width, c.height);
+  var px = data.data;
+
+  // 네 모서리 픽셀로 배경색 샘플링
+  function sampleCorner(x, y) {
+    var i = (y * c.width + x) * 4;
+    return [px[i], px[i+1], px[i+2]];
+  }
+  var corners = [
+    sampleCorner(0, 0),
+    sampleCorner(c.width-1, 0),
+    sampleCorner(0, c.height-1),
+    sampleCorner(c.width-1, c.height-1)
+  ];
+  // 가장 밝은 모서리 = 배경색
+  var bgColor = corners.reduce(function(a,b){
+    return (a[0]+a[1]+a[2]) > (b[0]+b[1]+b[2]) ? a : b;
+  });
+
+  // 배경과 유사한 픽셀 투명 처리
+  for (var i = 0; i < px.length; i += 4) {
+    var dr = px[i]   - bgColor[0];
+    var dg = px[i+1] - bgColor[1];
+    var db = px[i+2] - bgColor[2];
+    var dist = Math.sqrt(dr*dr + dg*dg + db*db);
+    if (dist < tolerance) {
+      // 경계 부드럽게
+      var alpha = Math.max(0, (dist - tolerance*0.5) / (tolerance*0.5));
+      px[i+3] = Math.round(px[i+3] * alpha);
+    }
+  }
+  ctx.putImageData(data, 0, 0);
+  return c;
 }
 
-// 모드 전환
-var MODES=['3d','Float','AR','Particle'];
+// 피사체를 여러 개의 독립 덩어리로 분리 (connected components 단순화)
+function extractSubjects(bgRemovedCanvas, maxSubjects) {
+  maxSubjects = maxSubjects || 4;
+  var W = bgRemovedCanvas.width, H = bgRemovedCanvas.height;
+  var ctx = bgRemovedCanvas.getContext('2d');
+  var data = ctx.getImageData(0, 0, W, H).data;
+
+  // 불투명 픽셀의 bounding box를 열(column) 기반으로 클러스터링
+  var cols = [];
+  for (var x = 0; x < W; x++) {
+    var hasOpaque = false;
+    for (var y = 0; y < H; y++) {
+      if (data[(y * W + x) * 4 + 3] > 30) { hasOpaque = true; break; }
+    }
+    cols.push(hasOpaque);
+  }
+
+  // 연속된 열 구간 찾기
+  var segments = [];
+  var inSeg = false, segStart = 0;
+  for (var x = 0; x < W; x++) {
+    if (cols[x] && !inSeg) { inSeg = true; segStart = x; }
+    else if (!cols[x] && inSeg) { inSeg = false; if (x - segStart > W * 0.05) segments.push([segStart, x-1]); }
+  }
+  if (inSeg) segments.push([segStart, W-1]);
+
+  // 최대 maxSubjects개로 병합
+  while (segments.length > maxSubjects) {
+    var minGap = Infinity, mergeIdx = 0;
+    for (var i = 0; i < segments.length-1; i++) {
+      var gap = segments[i+1][0] - segments[i][1];
+      if (gap < minGap) { minGap = gap; mergeIdx = i; }
+    }
+    segments[mergeIdx] = [segments[mergeIdx][0], segments[mergeIdx+1][1]];
+    segments.splice(mergeIdx+1, 1);
+  }
+
+  // 각 세그먼트를 독립 캔버스로
+  return segments.map(function(seg) {
+    var x0 = Math.max(0, seg[0]-4), x1 = Math.min(W-1, seg[1]+4);
+    var sw = x1 - x0 + 1;
+    var sc = document.createElement('canvas');
+    sc.width = sw; sc.height = H;
+    sc.getContext('2d').drawImage(bgRemovedCanvas, x0, 0, sw, H, 0, 0, sw, H);
+    return sc;
+  });
+}
+
+// AI 분석 + 배경제거
+document.getElementById('goBtn').addEventListener('click', function(){
+  if (!b64) return;
+  hide('cardPreview'); show('cardLoading');
+  document.getElementById('loadingText').textContent = 'AI가 그림을 분석하는 중... 🔍';
+
+  fetch('/api/analyze', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({image:b64})})
+    .then(function(r){return r.json();})
+    .then(function(info){
+      document.getElementById('loadingText').textContent = '피사체를 추출하는 중... ✂️';
+      lastTheme = info.theme || 'generic';
+      document.getElementById('descText').textContent = info.description || '멋진 그림이에요! ✨';
+      document.getElementById('floatImg').src = imgSrc;
+      document.getElementById('particleImg').src = imgSrc;
+
+      // 배경 제거
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function() {
+        var bgRemoved = removeBackground(img, 45);
+        subjectCanvases = extractSubjects(bgRemoved, 4);
+        if (subjectCanvases.length === 0) subjectCanvases = [bgRemoved];
+        hide('cardLoading'); show('cardResult');
+        setTimeout(function(){ switchMode('ar'); }, 100);
+      };
+      img.src = imgSrc;
+    })
+    .catch(function(){
+      lastTheme = 'generic';
+      document.getElementById('descText').textContent = '멋진 그림이에요! ✨';
+      document.getElementById('floatImg').src = imgSrc;
+      document.getElementById('particleImg').src = imgSrc;
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function(){
+        var bgRemoved = removeBackground(img, 45);
+        subjectCanvases = extractSubjects(bgRemoved, 4);
+        if (subjectCanvases.length === 0) subjectCanvases = [bgRemoved];
+        hide('cardLoading'); show('cardResult');
+        setTimeout(function(){ switchMode('ar'); }, 100);
+      };
+      img.src = imgSrc;
+    });
+});
+
+var MODES = ['3d','Float','AR','Particle'];
 function switchMode(mode){
-  currentMode=mode;
-  stopAllRafs();stopAR();
+  currentMode = mode;
+  stopAllRafs(); stopAR();
   MODES.forEach(function(m){
     document.getElementById('view'+m).classList.add('hidden');
     document.getElementById('tab'+m).classList.remove('active');
   });
-  show('view'+mode.charAt(0).toUpperCase()+mode.slice(1));
-  document.getElementById('tab'+mode.charAt(0).toUpperCase()+mode.slice(1)).classList.add('active');
-  if(mode==='3d') setTimeout(init3D,50);
-  else if(mode==='float') setTimeout(initFloat,50);
-  else if(mode==='ar') initAR();
-  else if(mode==='particle') setTimeout(initParticle,50);
+  show('view' + mode.charAt(0).toUpperCase() + mode.slice(1));
+  document.getElementById('tab' + mode.charAt(0).toUpperCase() + mode.slice(1)).classList.add('active');
+  if (mode==='3d') setTimeout(init3D, 50);
+  else if (mode==='float') setTimeout(initFloat, 50);
+  else if (mode==='ar') initAR();
+  else if (mode==='particle') setTimeout(initParticle, 50);
 }
 
-// ── 3D (Three.js) ──
+// ── 3D ──
 function init3D(){
-  var canvas=document.getElementById('threeCanvas');
-  var W=canvas.parentElement.offsetWidth||540;
-  var H=340;
-  canvas.width=W; canvas.height=H;
-  canvas.style.width=W+'px'; canvas.style.height=H+'px';
-
-  if(threeRenderer){threeRenderer.dispose();threeRenderer=null;}
-  threeRenderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:false});
+  var canvas = document.getElementById('threeCanvas');
+  var W = canvas.parentElement.offsetWidth || 540, H = 340;
+  canvas.width = W; canvas.height = H;
+  if (threeRenderer){threeRenderer.dispose();threeRenderer=null;}
+  threeRenderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:false});
   threeRenderer.setPixelRatio(window.devicePixelRatio||1);
-  threeRenderer.setSize(W,H);
-  threeRenderer.setClearColor(0x0d0d2b,1);
-
-  var scene=new THREE.Scene();
-  var camera=new THREE.PerspectiveCamera(50,W/H,0.1,100);
-  camera.position.z=2.8;
-
-  scene.add(new THREE.AmbientLight(0xffffff,0.7));
-  var dl=new THREE.DirectionalLight(0xa78bfa,1.5); dl.position.set(3,3,5); scene.add(dl);
-  var dl2=new THREE.DirectionalLight(0x60a5fa,0.8); dl2.position.set(-3,-2,2); scene.add(dl2);
-
-  // 이미지를 텍스처로 로드
-  var loader=new THREE.TextureLoader();
-  loader.crossOrigin='anonymous';
-  var tex=loader.load(imgSrc, function(){
-    // 텍스처 로드 완료 후 렌더 시작
-  });
-  tex.minFilter=THREE.LinearFilter;
-
-  var geo=new THREE.BoxGeometry(2.2,1.65,0.1);
-  var purple=new THREE.MeshPhongMaterial({color:0x5b21b6});
-  var front=new THREE.MeshPhongMaterial({map:tex});
-  // 앞면(index 4)에 이미지, 나머지는 보라색
-  var mesh=new THREE.Mesh(geo,[purple,purple,purple,purple,front,purple]);
+  threeRenderer.setSize(W, H);
+  threeRenderer.setClearColor(0x0d0d2b, 1);
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(50, W/H, 0.1, 100);
+  camera.position.z = 2.8;
+  scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+  var dl = new THREE.DirectionalLight(0xa78bfa, 1.5); dl.position.set(3,3,5); scene.add(dl);
+  var dl2 = new THREE.DirectionalLight(0x60a5fa, 0.8); dl2.position.set(-3,-2,2); scene.add(dl2);
+  var loader = new THREE.TextureLoader();
+  var tex = loader.load(imgSrc); tex.minFilter = THREE.LinearFilter;
+  var geo = new THREE.BoxGeometry(2.2, 1.65, 0.1);
+  var purple = new THREE.MeshPhongMaterial({color:0x5b21b6});
+  var mesh = new THREE.Mesh(geo, [purple,purple,purple,purple,new THREE.MeshPhongMaterial({map:tex}),purple]);
   scene.add(mesh);
-
-  // 별 파티클
-  var pGeo=new THREE.BufferGeometry();
-  var pos=[];
-  for(var i=0;i<300;i++){pos.push((Math.random()-0.5)*12,(Math.random()-0.5)*12,(Math.random()-0.5)*8);}
-  pGeo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
-  scene.add(new THREE.Points(pGeo,new THREE.PointsMaterial({color:0xffffff,size:0.03,transparent:true,opacity:0.6})));
-
-  // 드래그 회전
+  var pGeo = new THREE.BufferGeometry();
+  var pos = [];
+  for (var i=0;i<300;i++){pos.push((Math.random()-0.5)*12,(Math.random()-0.5)*12,(Math.random()-0.5)*8);}
+  pGeo.setAttribute('position', new THREE.Float32BufferAttribute(pos,3));
+  scene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({color:0xffffff,size:0.03,transparent:true,opacity:0.6})));
   var drag={on:false,x:0,y:0};
   canvas.addEventListener('mousedown',function(e){drag.on=true;drag.x=e.clientX;drag.y=e.clientY;});
   window.addEventListener('mouseup',function(){drag.on=false;});
@@ -270,105 +354,176 @@ function init3D(){
   window.addEventListener('touchend',function(){drag.on=false;});
   window.addEventListener('touchmove',function(e){if(!drag.on)return;mesh.rotation.y+=(e.touches[0].clientX-drag.x)*0.014;mesh.rotation.x+=(e.touches[0].clientY-drag.y)*0.014;drag.x=e.touches[0].clientX;drag.y=e.touches[0].clientY;},{passive:true});
   canvas.addEventListener('wheel',function(e){camera.position.z=Math.max(1.2,Math.min(6,camera.position.z+e.deltaY*0.005));});
-
   var t=0;
-  function loop(){
-    rafIds.three=requestAnimationFrame(loop);
-    t+=0.02;
-    if(!drag.on){mesh.rotation.y+=0.007;mesh.rotation.x=Math.sin(t)*0.12;}
-    threeRenderer.render(scene,camera);
-  }
+  function loop(){rafIds.three=requestAnimationFrame(loop);t+=0.02;if(!drag.on){mesh.rotation.y+=0.007;mesh.rotation.x=Math.sin(t)*0.12;}threeRenderer.render(scene,camera);}
   loop();
 }
 
-// ── 공중 부양 ──
+// ── 부양 ──
 function initFloat(){
-  var cvs=document.getElementById('floatCvs');
-  var wrap=document.getElementById('floatWrap');
-  cvs.width=wrap.offsetWidth||540;
-  cvs.height=wrap.offsetHeight||320;
-  var W=cvs.width,H=cvs.height,ctx=cvs.getContext('2d');
-  var emojis=EMOJIS[lastTheme]||EMOJIS.generic;
-  var stars=Array.from({length:100},function(){return{x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+0.3,a:Math.random(),s:Math.random()*0.008+0.003};});
-  var pts=Array.from({length:20},function(){return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:12+Math.random()*14,vx:(Math.random()-0.5)*0.7,vy:-Math.random()*0.5-0.15,life:Math.random()*Math.PI*2,ls:0.022};});
-  function loop(){
-    ctx.clearRect(0,0,W,H);
-    stars.forEach(function(s){s.a+=s.s;if(s.a>1)s.a=0;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+s.a.toFixed(2)+')';ctx.fill();});
-    pts.forEach(function(p){p.life+=p.ls;p.x+=p.vx+Math.sin(p.life)*0.3;p.y+=p.vy;if(p.y<-30){p.y=H+10;p.x=Math.random()*W;}if(p.x<0)p.x=W;if(p.x>W)p.x=0;ctx.save();ctx.globalAlpha=Math.max(0,0.5+Math.sin(p.life)*0.4);ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.em,p.x,p.y);ctx.restore();});
-    rafIds.float=requestAnimationFrame(loop);
-  }
+  var cvs = document.getElementById('floatCvs');
+  var wrap = document.getElementById('floatWrap');
+  cvs.width = wrap.offsetWidth||540; cvs.height = wrap.offsetHeight||320;
+  var W=cvs.width, H=cvs.height, ctx=cvs.getContext('2d');
+  var emojis = EMOJIS[lastTheme]||EMOJIS.generic;
+  var stars = Array.from({length:100},function(){return{x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+0.3,a:Math.random(),s:Math.random()*0.008+0.003};});
+  var pts = Array.from({length:20},function(){return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:12+Math.random()*14,vx:(Math.random()-0.5)*0.7,vy:-Math.random()*0.5-0.15,life:Math.random()*Math.PI*2,ls:0.022};});
+  function loop(){ctx.clearRect(0,0,W,H);stars.forEach(function(s){s.a+=s.s;if(s.a>1)s.a=0;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+s.a.toFixed(2)+')';ctx.fill();});pts.forEach(function(p){p.life+=p.ls;p.x+=p.vx+Math.sin(p.life)*0.3;p.y+=p.vy;if(p.y<-30){p.y=H+10;p.x=Math.random()*W;}if(p.x<0)p.x=W;if(p.x>W)p.x=0;ctx.save();ctx.globalAlpha=Math.max(0,0.5+Math.sin(p.life)*0.4);ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.em,p.x,p.y);ctx.restore();});rafIds.float=requestAnimationFrame(loop);}
   loop();
 }
 
-// ── AR 카메라 ──
+// ── AR (피사체가 카메라 위에서 움직임) ──
 function initAR(){
-  var vid=document.getElementById('arVid');
-  var cvs=document.getElementById('arOverlay');
+  var vid = document.getElementById('arVid');
+  var cvs = document.getElementById('arOverlay');
+  var wrap = document.getElementById('arWrap');
+
   navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
     .then(function(s){
-      arStream=s;
-      vid.srcObject=s;
+      arStream = s;
+      vid.srcObject = s;
       vid.play();
-      vid.addEventListener('loadedmetadata',function(){
-        var W=vid.videoWidth||640, H=vid.videoHeight||480;
-        cvs.width=W; cvs.height=H;
-        cvs.style.width='100%'; cvs.style.height='100%';
-        var ctx=cvs.getContext('2d');
-        var emojis=EMOJIS[lastTheme]||EMOJIS.generic;
-        var drawImg=new Image();
-        drawImg.crossOrigin='anonymous';
-        drawImg.src=imgSrc;
-        var copies=Array.from({length:3},function(_,i){return{x:80+i*180,y:80+i*80,vx:(Math.random()-0.5)*1.8,vy:(Math.random()-0.5)*1.2,rot:0,rs:(Math.random()-0.5)*0.025,s:0.22+i*0.06};});
-        var pts=Array.from({length:18},function(){return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:16+Math.random()*12,vx:(Math.random()-0.5)*1.2,vy:-Math.random()*0.8-0.2,life:Math.random()*Math.PI*2,ls:0.025};});
-        function loop(){
-          ctx.clearRect(0,0,W,H);
-          copies.forEach(function(c){
-            c.x+=c.vx; c.y+=c.vy; c.rot+=c.rs;
-            if(c.x<0||c.x>W)c.vx*=-1;
-            if(c.y<0||c.y>H)c.vy*=-1;
-            if(drawImg.complete&&drawImg.naturalWidth>0){
-              var iw=drawImg.naturalWidth*c.s, ih=drawImg.naturalHeight*c.s;
-              ctx.save();
-              ctx.translate(c.x,c.y); ctx.rotate(c.rot);
-              ctx.shadowBlur=24; ctx.shadowColor='rgba(167,139,250,0.9)';
-              ctx.globalAlpha=0.88;
-              ctx.drawImage(drawImg,-iw/2,-ih/2,iw,ih);
-              ctx.restore();
-            }
+      vid.addEventListener('loadedmetadata', function startAR(){
+        vid.removeEventListener('loadedmetadata', startAR);
+        var VW = vid.videoWidth||640, VH = vid.videoHeight||480;
+        cvs.width = VW; cvs.height = VH;
+
+        var ctx = cvs.getContext('2d');
+        var emojis = EMOJIS[lastTheme]||EMOJIS.generic;
+
+        // 피사체 스프라이트 생성
+        var sprites = [];
+        var srcs = subjectCanvases.length > 0 ? subjectCanvases : [];
+
+        // 피사체가 없으면 원본 전체를 축소해서 사용
+        if (srcs.length === 0) {
+          var fallback = document.createElement('canvas');
+          fallback.width = 200; fallback.height = 150;
+          var fImg = new Image(); fImg.src = imgSrc;
+          fImg.onload = function(){ fallback.getContext('2d').drawImage(fImg,0,0,200,150); };
+          srcs = [fallback];
+        }
+
+        srcs.forEach(function(sc, idx) {
+          var aspect = sc.width / sc.height;
+          var sh = VH * (0.25 + Math.random()*0.15);
+          var sw = sh * aspect;
+
+          // 움직임 패턴
+          var moveType = idx % 3; // 0=걷기 1=튀기 2=빙글
+          sprites.push({
+            canvas: sc,
+            x: Math.random() * (VW - sw),
+            y: VH - sh - 10,
+            w: sw, h: sh,
+            vx: (Math.random() > 0.5 ? 1 : -1) * (1.2 + Math.random()*1.5),
+            vy: 0,
+            baseY: VH - sh - 10,
+            life: Math.random() * Math.PI * 2,
+            moveType: moveType,
+            flipX: false,
+            bobAmp: 8 + Math.random()*10,
+            bobSpeed: 0.04 + Math.random()*0.03,
+            scale: 1,
+            scaleDir: 1,
+            shadow: true
           });
-          pts.forEach(function(p){p.life+=p.ls;p.x+=p.vx+Math.sin(p.life)*0.4;p.y+=p.vy;if(p.y<-30){p.y=H+10;p.x=Math.random()*W;}if(p.x<0)p.x=W;if(p.x>W)p.x=0;ctx.save();ctx.globalAlpha=Math.max(0,0.55+Math.sin(p.life)*0.4);ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.em,p.x,p.y);ctx.restore();});
-          rafIds.ar=requestAnimationFrame(loop);
+        });
+
+        // 이모지 파티클
+        var pts = Array.from({length:15},function(){return{x:Math.random()*VW,y:Math.random()*VH,em:emojis[Math.floor(Math.random()*emojis.length)],sz:18+Math.random()*14,vx:(Math.random()-0.5)*1,vy:-Math.random()*0.7-0.2,life:Math.random()*Math.PI*2,ls:0.022};});
+
+        function loop(){
+          ctx.clearRect(0,0,VW,VH);
+
+          // 그림자 + 피사체 그리기
+          sprites.forEach(function(sp){
+            sp.life += sp.bobSpeed;
+
+            if (sp.moveType === 0) {
+              // 걷기: 좌우 이동 + 위아래 살짝 바운스
+              sp.x += sp.vx;
+              sp.y = sp.baseY + Math.sin(sp.life*2)*sp.bobAmp*0.4;
+              if (sp.x < 0){ sp.x=0; sp.vx*=-1; sp.flipX=!sp.flipX; }
+              if (sp.x + sp.w > VW){ sp.x=VW-sp.w; sp.vx*=-1; sp.flipX=!sp.flipX; }
+            } else if (sp.moveType === 1) {
+              // 튀기기
+              sp.x += sp.vx;
+              sp.vy += 0.25;
+              sp.y += sp.vy;
+              if (sp.y + sp.h >= VH - 5){ sp.y=VH-sp.h-5; sp.vy=-(5+Math.random()*4); }
+              if (sp.x<0||sp.x+sp.w>VW){ sp.vx*=-1; sp.flipX=!sp.flipX; }
+            } else {
+              // 떠다니기: 원형 궤도
+              sp.x += sp.vx + Math.cos(sp.life)*0.8;
+              sp.y = sp.baseY + Math.sin(sp.life)*sp.bobAmp;
+              if (sp.x<0||sp.x+sp.w>VW) sp.vx*=-1;
+            }
+
+            // 그림자
+            ctx.save();
+            ctx.globalAlpha = 0.18;
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.ellipse(sp.x+sp.w/2, VH-8, sp.w*0.38, 8, 0, 0, Math.PI*2);
+            ctx.fill();
+            ctx.restore();
+
+            // 피사체 그리기 (좌우 반전 포함)
+            ctx.save();
+            ctx.globalAlpha = 1;
+            if (sp.flipX) {
+              ctx.translate(sp.x + sp.w, sp.y);
+              ctx.scale(-1, 1);
+              ctx.drawImage(sp.canvas, 0, 0, sp.w, sp.h);
+            } else {
+              ctx.drawImage(sp.canvas, sp.x, sp.y, sp.w, sp.h);
+            }
+            ctx.restore();
+          });
+
+          // 이모지 파티클
+          pts.forEach(function(p){
+            p.life+=p.ls; p.x+=p.vx+Math.sin(p.life)*0.4; p.y+=p.vy;
+            if(p.y<-30){p.y=VH+10;p.x=Math.random()*VW;}
+            if(p.x<0)p.x=VW; if(p.x>VW)p.x=0;
+            ctx.save();
+            ctx.globalAlpha=Math.max(0,0.55+Math.sin(p.life)*0.4);
+            ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+            ctx.fillText(p.em,p.x,p.y);
+            ctx.restore();
+          });
+
+          rafIds.ar = requestAnimationFrame(loop);
         }
         loop();
       });
     })
     .catch(function(){
-      document.getElementById('viewAR').innerHTML='<div style="text-align:center;padding:40px;color:#666;font-size:0.95rem">📵 카메라 권한이 없어요<br><br>브라우저 주소창 옆 자물쇠 아이콘을 눌러<br>카메라 권한을 허용해주세요!</div>';
+      document.getElementById('viewAR').innerHTML='<div style="text-align:center;padding:40px;color:#666;font-size:0.95rem">📵 카메라 권한이 없어요<br><br>브라우저에서 카메라 권한을 허용해주세요!</div>';
     });
 }
 
 // ── 파티클 ──
 function initParticle(){
-  var img=document.getElementById('particleImg');
-  var cvs=document.getElementById('particleCvs');
+  var img = document.getElementById('particleImg');
+  var cvs = document.getElementById('particleCvs');
   function start(){
     var W=img.offsetWidth||540, H=img.offsetHeight||320;
     cvs.width=W; cvs.height=H;
     var ctx=cvs.getContext('2d');
     var emojis=EMOJIS[lastTheme]||EMOJIS.generic;
     var big=Array.from({length:18},function(){return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:16+Math.random()*16,vx:(Math.random()-0.5)*1.2,vy:-Math.random()*0.8-0.2,life:Math.random()*Math.PI*2,ls:0.025};});
-    var small=Array.from({length:30},function(){return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:8+Math.random()*8,vx:(Math.random()-0.5)*0.6,vy:-Math.random()*0.4-0.1,life:Math.random()*Math.PI*2,ls:0.015};});
     var glows=Array.from({length:50},function(){return{x:Math.random()*W,y:Math.random()*H,r:Math.random()*4+1,vx:(Math.random()-0.5)*0.4,vy:-Math.random()*0.3,life:Math.random()*Math.PI*2,ls:0.018};});
     function loop(){
       ctx.clearRect(0,0,W,H);
       glows.forEach(function(p){p.life+=p.ls;p.x+=p.vx;p.y+=p.vy;if(p.y<-10){p.y=H+5;p.x=Math.random()*W;}if(p.x<0)p.x=W;if(p.x>W)p.x=0;ctx.save();ctx.globalAlpha=Math.max(0,0.25+Math.sin(p.life)*0.25);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(167,139,250,1)';ctx.fill();ctx.restore();});
-      [big,small].forEach(function(layer){layer.forEach(function(p){p.life+=p.ls;p.x+=p.vx+Math.sin(p.life)*0.3;p.y+=p.vy;if(p.y<-30){p.y=H+10;p.x=Math.random()*W;}if(p.x<0)p.x=W;if(p.x>W)p.x=0;ctx.save();ctx.globalAlpha=Math.max(0,0.5+Math.sin(p.life)*0.4);ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.em,p.x,p.y);ctx.restore();});});
+      big.forEach(function(p){p.life+=p.ls;p.x+=p.vx+Math.sin(p.life)*0.3;p.y+=p.vy;if(p.y<-30){p.y=H+10;p.x=Math.random()*W;}if(p.x<0)p.x=W;if(p.x>W)p.x=0;ctx.save();ctx.globalAlpha=Math.max(0,0.5+Math.sin(p.life)*0.4);ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.em,p.x,p.y);ctx.restore();});
       rafIds.particle=requestAnimationFrame(loop);
     }
     loop();
   }
-  if(img.complete&&img.naturalWidth>0) start();
-  else img.onload=start;
+  if(img.complete&&img.naturalWidth>0) start(); else img.onload=start;
 }
 </script>
 </body>
