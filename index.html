@@ -191,69 +191,80 @@ document.getElementById('resetBtn1').addEventListener('click',reset);
 document.getElementById('resetBtn2').addEventListener('click',reset);
 document.getElementById('reBtn').addEventListener('click',function(){stopAR();setTimeout(startAR,100);});
 
-// ── 배경 제거 (플러드필 방식) ──
+// ── 배경 제거 (축소 후 처리 — 빠르고 안전) ──
 function removeBackground(imgEl){
+  // 처리 크기를 최대 400px로 제한 (속도 보장)
+  var MAX=400;
+  var nw=imgEl.naturalWidth||imgEl.width||200;
+  var nh=imgEl.naturalHeight||imgEl.height||200;
+  var scale=Math.min(1,MAX/Math.max(nw,nh));
+  var W=Math.round(nw*scale), H=Math.round(nh*scale);
+
   var c=document.createElement('canvas');
-  var W=imgEl.naturalWidth||imgEl.width||200;
-  var H=imgEl.naturalHeight||imgEl.height||200;
-  c.width=W;c.height=H;
+  c.width=W; c.height=H;
   var ctx=c.getContext('2d');
   ctx.drawImage(imgEl,0,0,W,H);
-  var d=ctx.getImageData(0,0,W,H),px=d.data;
+  var d=ctx.getImageData(0,0,W,H), px=d.data;
 
-  // 가장자리 전체 픽셀 색상 수집해서 배경색 결정
-  var colorCount={};
-  function key(r,g,b){return Math.round(r/20)+'_'+Math.round(g/20)+'_'+Math.round(b/20);}
-  var step=Math.max(1,Math.floor(Math.max(W,H)/40));
+  // 가장자리 샘플로 배경색 추정
+  var rs=0,gs=0,bs=0,n=0;
+  var step=Math.max(1,Math.floor(Math.max(W,H)/30));
   for(var x=0;x<W;x+=step){
-    [0,H-1].forEach(function(y){var i=(y*W+x)*4;var k=key(px[i],px[i+1],px[i+2]);colorCount[k]=(colorCount[k]||0)+1;});
+    var i0=(0*W+x)*4; rs+=px[i0];gs+=px[i0+1];bs+=px[i0+2];n++;
+    var i1=((H-1)*W+x)*4; rs+=px[i1];gs+=px[i1+1];bs+=px[i1+2];n++;
   }
   for(var y=0;y<H;y+=step){
-    [0,W-1].forEach(function(x){var i=(y*W+x)*4;var k=key(px[i],px[i+1],px[i+2]);colorCount[k]=(colorCount[k]||0)+1;});
+    var i2=(y*W)*4; rs+=px[i2];gs+=px[i2+1];bs+=px[i2+2];n++;
+    var i3=(y*W+(W-1))*4; rs+=px[i3];gs+=px[i3+1];bs+=px[i3+2];n++;
   }
-  var bgKey=Object.keys(colorCount).reduce(function(a,b){return colorCount[a]>colorCount[b]?a:b;});
-  var bk=bgKey.split('_').map(function(v){return parseInt(v)*20;});
-  var br=bk[0],bg=bk[1],bb=bk[2];
+  var br=rs/n, bg_=gs/n, bb=bs/n;
+  var tol=65;
 
-  // flood fill 방식으로 가장자리부터 배경 제거
-  var visited=new Uint8Array(W*H);
-  var queue=[];
-  var tol=60;
-
-  function colorDist(i){
-    var dr=px[i]-br,dg=px[i+1]-bg,db=px[i+2]-bb;
-    return Math.sqrt(dr*dr+dg*dg+db*db);
+  // 가장자리 flood fill (배열 대신 스택 루프)
+  var vis=new Uint8Array(W*H);
+  var stk=[];
+  for(var x=0;x<W;x++){
+    if(!vis[x]){vis[x]=1;stk.push(x);}
+    if(!vis[(H-1)*W+x]){vis[(H-1)*W+x]=1;stk.push((H-1)*W+x);}
+  }
+  for(var y=1;y<H-1;y++){
+    if(!vis[y*W]){vis[y*W]=1;stk.push(y*W);}
+    if(!vis[y*W+(W-1)]){vis[y*W+(W-1)]=1;stk.push(y*W+(W-1));}
   }
 
-  // 가장자리 시드
-  for(var x=0;x<W;x++){[0,H-1].forEach(function(y){if(!visited[y*W+x]&&colorDist((y*W+x)*4)<tol){visited[y*W+x]=1;queue.push(y*W+x);}});}
-  for(var y=0;y<H;y++){[0,W-1].forEach(function(x){if(!visited[y*W+x]&&colorDist((y*W+x)*4)<tol){visited[y*W+x]=1;queue.push(y*W+x);}});}
-
-  var dx=[-1,1,0,0],dy=[0,0,-1,1];
-  var qi=0;
-  while(qi<queue.length){
-    var pos=queue[qi++];
-    var px_=pos%W,py_=Math.floor(pos/W);
-    px[pos*4+3]=0; // 투명
+  var DX=[-1,1,0,0],DY=[0,0,-1,1];
+  while(stk.length){
+    var pos=stk.pop();
+    var px2=pos%W, py2=Math.floor(pos/W);
+    var pi=pos*4;
+    var dr=px[pi]-br,dg=px[pi+1]-bg_,db=px[pi+2]-bb;
+    var dist=Math.sqrt(dr*dr+dg*dg+db*db);
+    if(dist>tol) continue; // 피사체 픽셀이면 멈춤
+    px[pi+3]=0;
     for(var d=0;d<4;d++){
-      var nx=px_+dx[d],ny=py_+dy[d];
+      var nx=px2+DX[d],ny=py2+DY[d];
       if(nx<0||nx>=W||ny<0||ny>=H)continue;
       var ni=ny*W+nx;
-      if(!visited[ni]&&colorDist(ni*4)<tol){visited[ni]=1;queue.push(ni);}
+      if(!vis[ni]){vis[ni]=1;stk.push(ni);}
     }
   }
 
-  // 내부 배경색도 추가 제거 (경계 부드럽게)
+  // 경계 부드럽게
   for(var i=0;i<px.length;i+=4){
     if(px[i+3]>0){
-      var dist=colorDist(i);
-      if(dist<tol*0.5){px[i+3]=0;}
-      else if(dist<tol){px[i+3]=Math.round(px[i+3]*(dist-tol*0.5)/(tol*0.5));}
+      var dr2=px[i]-br,dg2=px[i+1]-bg_,db2=px[i+2]-bb;
+      var dist2=Math.sqrt(dr2*dr2+dg2*dg2+db2*db2);
+      if(dist2<tol*0.4) px[i+3]=0;
+      else if(dist2<tol) px[i+3]=Math.round(px[i+3]*(dist2-tol*0.4)/(tol*0.6));
     }
   }
-
   ctx.putImageData(d,0,0);
-  return c;
+
+  // 원래 크기로 복원
+  var out=document.createElement('canvas');
+  out.width=nw; out.height=nh;
+  out.getContext('2d').drawImage(c,0,0,nw,nh);
+  return out;
 }
 
 // ── 피사체 분리 ──
@@ -295,8 +306,21 @@ document.getElementById('goBtn').addEventListener('click',function(){
     var img=new Image();
     img.onload=function(){
       origImg=img;
-      var bgR=removeBackground(img);
-      subjectCanvases=extractSubjects(bgR,5);
+      // setTimeout으로 비동기 처리 — UI 블로킹 방지
+      setTimeout(function(){
+        try{
+          var bgR=removeBackground(img);
+          subjectCanvases=extractSubjects(bgR,5);
+        }catch(e){
+          console.error('bg remove error',e);
+          subjectCanvases=[];
+        }
+        hide('cardLoading');show('cardResult');
+        setTimeout(startAR,200);
+      },50);
+    };
+    img.onerror=function(){
+      subjectCanvases=[];
       hide('cardLoading');show('cardResult');
       setTimeout(startAR,200);
     };
