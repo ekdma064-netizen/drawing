@@ -303,10 +303,13 @@ document.getElementById('goBtn').addEventListener('click',function(){
     img.src=imgSrc;
   }
 
+  // API 타임아웃 5초 — 응답 없으면 기본값으로 진행
+  var apiTimeout=setTimeout(function(){process('generic','멋진 그림이에요! ✨');},5000);
+
   fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b64})})
-    .then(function(r){return r.json();})
-    .then(function(d){process(d.theme,d.description);})
-    .catch(function(){process('generic','멋진 그림이에요! ✨');});
+    .then(function(r){return r.ok?r.json():Promise.reject(r.status);})
+    .then(function(d){clearTimeout(apiTimeout);process(d.theme||'generic',d.description||'멋진 그림이에요! ✨');})
+    .catch(function(){clearTimeout(apiTimeout);process('generic','멋진 그림이에요! ✨');});
 });
 
 // ── AR 메인 ──
