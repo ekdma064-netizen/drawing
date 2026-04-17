@@ -5,31 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>살아있는 그림 🎨</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: sans-serif; background: #0a0a1a; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; color: white; }
-h1 { font-size: 1.7rem; font-weight: 800; background: linear-gradient(90deg,#a78bfa,#60a5fa,#f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin: 8px 0 4px; }
-.sub { color: #888; font-size: 0.9rem; text-align: center; margin-bottom: 20px; }
-.card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 24px; width: 100%; max-width: 580px; margin-bottom: 16px; }
-label.upload { display: flex; flex-direction: column; align-items: center; border: 2px dashed rgba(167,139,250,0.5); background: rgba(167,139,250,0.05); color: #a78bfa; font-weight: 700; padding: 36px 20px; border-radius: 16px; cursor: pointer; text-align: center; gap: 8px; }
-label.upload:hover { background: rgba(167,139,250,0.1); }
-button { display: block; width: 100%; padding: 14px; border-radius: 12px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 10px; transition: all 0.2s; }
-button:hover { opacity: 0.88; }
-.btn-purple { background: linear-gradient(135deg,#7c3aed,#4f46e5); color: white; }
-.btn-yellow { background: linear-gradient(135deg,#f59e0b,#ef4444); color: white; font-size: 1.1rem; }
-.btn-gray { background: rgba(255,255,255,0.1); color: #aaa; }
-.btn-green { background: linear-gradient(135deg,#10b981,#3b82f6); color: white; }
-#snapVideoBox { display: none; position: relative; margin-top: 12px; }
-#snapVideo { width: 100%; border-radius: 12px; display: block; }
-#snapBtn { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); width: 58px; height: 58px; border-radius: 50%; background: white; border: 4px solid #7c3aed; font-size: 1.5rem; cursor: pointer; margin-top: 0; padding: 0; }
-img.preview { width: 100%; border-radius: 12px; display: block; }
-.spinner-wrap { text-align: center; padding: 30px; }
-.spinner { width: 52px; height: 52px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #a78bfa; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-#arCanvas { display: block; width: 100%; border-radius: 16px; background: #111; }
-.desc { background: rgba(167,139,250,0.1); border-left: 3px solid #a78bfa; border-radius: 10px; padding: 14px 16px; margin-top: 14px; font-size: 0.9rem; color: #ccc; line-height: 1.6; }
-.hidden { display: none !important; }
-.hint { text-align: center; font-size: 0.78rem; color: #555; margin-top: 6px; }
-.tip { background: rgba(255,200,0,0.07); border: 1px solid rgba(255,200,0,0.2); border-radius: 10px; padding: 10px 14px; font-size: 0.82rem; color: #bbb; margin-top: 10px; line-height: 1.5; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:sans-serif;background:#0a0a1a;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px;color:#fff}
+h1{font-size:1.7rem;font-weight:800;background:linear-gradient(90deg,#a78bfa,#60a5fa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin:8px 0 4px}
+.sub{color:#888;font-size:.9rem;text-align:center;margin-bottom:20px}
+.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:24px;width:100%;max-width:560px;margin-bottom:16px}
+label.up{display:flex;flex-direction:column;align-items:center;border:2px dashed rgba(167,139,250,.5);background:rgba(167,139,250,.05);color:#a78bfa;font-weight:700;padding:32px 20px;border-radius:16px;cursor:pointer;text-align:center;gap:8px}
+label.up:hover{background:rgba(167,139,250,.1)}
+button{display:block;width:100%;padding:13px;border-radius:12px;border:none;font-size:1rem;font-weight:700;cursor:pointer;margin-top:10px;transition:opacity .2s}
+button:hover{opacity:.85}
+.bp{background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff}
+.by{background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:1.05rem}
+.bg{background:rgba(255,255,255,.1);color:#aaa}
+.bn{background:linear-gradient(135deg,#10b981,#3b82f6);color:#fff}
+#svb{display:none;position:relative;margin-top:12px}
+#sv{width:100%;border-radius:12px;display:block}
+#sb{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:56px;height:56px;border-radius:50%;background:#fff;border:4px solid #7c3aed;font-size:1.4rem;cursor:pointer;margin-top:0;padding:0}
+img.prev{width:100%;border-radius:12px;display:block}
+.sp{text-align:center;padding:28px}
+.spi{width:50px;height:50px;border:4px solid rgba(255,255,255,.1);border-top-color:#a78bfa;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+#ac{display:block;width:100%;border-radius:16px;background:#111}
+.desc{background:rgba(167,139,250,.1);border-left:3px solid #a78bfa;border-radius:10px;padding:14px;margin-top:14px;font-size:.9rem;color:#ccc;line-height:1.6}
+.hidden{display:none!important}
+.hint{text-align:center;font-size:.78rem;color:#555;margin-top:6px}
+.tip{background:rgba(255,200,0,.07);border:1px solid rgba(255,200,0,.2);border-radius:10px;padding:10px 14px;font-size:.82rem;color:#bbb;margin-top:10px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -38,253 +38,141 @@ img.preview { width: 100%; border-radius: 12px; display: block; }
 <h1>살아있는 그림</h1>
 <p class="sub">피사체가 그림에서 걸어나와요! ✨</p>
 
-<div class="card" id="cardUpload">
-  <label class="upload" for="fileIn">
+<div class="card" id="cUp">
+  <label class="up" for="fi">
     <span style="font-size:2rem">🖼️</span>
     <span>여기를 눌러서 그림을 업로드하세요</span>
-    <span style="font-size:0.8rem;color:#555;font-weight:400">흰 배경 그림이 가장 잘 돼요!</span>
-    <input type="file" id="fileIn" accept="image/*" style="display:none">
+    <span style="font-size:.8rem;color:#555;font-weight:400">흰 배경 그림이 가장 잘 돼요!</span>
+    <input type="file" id="fi" accept="image/*" style="display:none">
   </label>
-  <button class="btn-purple" id="camBtn">📷 카메라로 찍기</button>
-  <div id="snapVideoBox">
-    <video id="snapVideo" autoplay playsinline muted></video>
-    <button id="snapBtn">📸</button>
+  <button class="bp" id="camBtn">📷 카메라로 찍기</button>
+  <div id="svb">
+    <video id="sv" autoplay playsinline muted></video>
+    <button id="sb">📸</button>
   </div>
-  <div class="tip">💡 하얀 종이에 그린 그림을 찍어주세요. 피사체가 종이에서 걸어나와요!</div>
+  <div class="tip">💡 하얀 종이에 그린 그림을 올려주세요!</div>
 </div>
 
-<div class="card hidden" id="cardPreview">
-  <img class="preview" id="previewImg" alt="">
-  <button class="btn-yellow" id="goBtn">✨ 그림에서 꺼내줘!</button>
-  <button class="btn-gray" id="resetBtn1">🔄 다시 선택</button>
+<div class="card hidden" id="cPrev">
+  <img class="prev" id="pi" alt="">
+  <button class="by" id="goBtn">✨ 그림에서 꺼내줘!</button>
+  <button class="bg" id="rb1">🔄 다시 선택</button>
 </div>
 
-<div class="card hidden" id="cardLoading">
-  <div class="spinner-wrap">
-    <div class="spinner"></div>
-    <p id="loadingText" style="color:#888">AI가 분석 중... 🔍</p>
+<div class="card hidden" id="cLoad">
+  <div class="sp">
+    <div class="spi"></div>
+    <p id="lt" style="color:#888">분석 중... 🔍</p>
   </div>
 </div>
 
-<div class="card hidden" id="cardResult">
-  <canvas id="arCanvas"></canvas>
-  <p class="hint">피사체가 그림 밖으로 걸어나와요! 📷</p>
-  <div class="desc" id="descText"></div>
-  <button class="btn-green" id="reBtn" style="margin-top:14px">🔮 다시 시작</button>
-  <button class="btn-gray" id="resetBtn2">🔄 새 그림 선택</button>
+<div class="card hidden" id="cRes">
+  <canvas id="ac"></canvas>
+  <p class="hint">피사체가 살아 움직여요! 🎉</p>
+  <div class="desc" id="dt">멋진 그림이에요!</div>
+  <button class="bn" id="reBtn" style="margin-top:14px">🔮 다시 시작</button>
+  <button class="bg" id="rb2">🔄 새 그림 선택</button>
 </div>
 
-<video id="arVidHidden" autoplay playsinline muted style="display:none;position:fixed;top:-9999px;left:-9999px;"></video>
+<video id="arv" autoplay playsinline muted style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px"></video>
 
 <script>
-var imgSrc=null, b64=null, snapStream=null, arStream=null, arRaf=null;
-var subjectCanvases=[], origImg=null, lastTheme='generic';
-var audioCtx=null;
+var imgSrc=null,b64=null,snapStr=null,arStr=null,raf=null;
+var subCs=[],origImg=null,theme='generic';
+var AC=null; // AudioContext
 
-var EMOJIS={nature:["🌸","🍃","🦋","🌻"],ocean:["🐠","🫧","🌊","🐙"],space:["⭐","✨","💫","🌟"],animals:["🐾","💕","✨","🌟"],people:["💗","🎵","✨","🎉"],vehicles:["💨","⭐","💥","🌟"],fantasy:["✨","💫","🌈","🔮"],generic:["✨","⭐","💫","🌟"]};
+var EM={nature:['🌸','🍃','🦋','🌻'],ocean:['🐠','🫧','🌊','🐙'],space:['⭐','✨','💫','🌟'],animals:['🐾','💕','✨','🌟'],people:['💗','🎵','✨','🎉'],vehicles:['💨','⭐','💥','🌟'],fantasy:['✨','💫','🌈','🔮'],generic:['✨','⭐','💫','🌟']};
 
-function show(id){document.getElementById(id).classList.remove('hidden');}
-function hide(id){document.getElementById(id).classList.add('hidden');}
-function stopRaf(){if(arRaf){cancelAnimationFrame(arRaf);arRaf=null;}}
-function stopAR(){stopRaf();if(arStream){arStream.getTracks().forEach(function(t){t.stop();});arStream=null;}}
+function S(id){document.getElementById(id).classList.remove('hidden')}
+function H(id){document.getElementById(id).classList.add('hidden')}
+function stopRaf(){if(raf){cancelAnimationFrame(raf);raf=null}}
+function stopAR(){stopRaf();if(arStr){arStr.getTracks().forEach(function(t){t.stop()});arStr=null}}
 
-// ── Web Audio 효과음 ──
-function initAudio(){
-  if(audioCtx)return;
-  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+// 오디오
+function initAC(){if(!AC)try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+function beep(freq,dur,type,vol){
+  if(!AC)return;
+  try{
+    var o=AC.createOscillator(),g=AC.createGain();
+    o.connect(g);g.connect(AC.destination);
+    o.type=type||'sine';
+    var t=AC.currentTime;
+    o.frequency.setValueAtTime(freq,t);
+    g.gain.setValueAtTime(vol||0.15,t);
+    g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+    o.start(t);o.stop(t+dur+.05);
+  }catch(e){}
 }
+function playAppear(){beep(400,.08,'sine',.2);setTimeout(function(){beep(600,.08,'sine',.18)},80);setTimeout(function(){beep(800,.2,'sine',.15)},160)}
+function playJump(){beep(300,.05,'square',.12);setTimeout(function(){beep(150,.12,'square',.08)},50)}
+function playStep(){beep(100,.06,'triangle',.08)}
+function playBubble(){beep(700,.05,'sine',.1);setTimeout(function(){beep(400,.1,'sine',.08)},50)}
 
-function playSound(type){
-  if(!audioCtx)return;
-  var o=audioCtx.createOscillator();
-  var g=audioCtx.createGain();
-  o.connect(g);g.connect(audioCtx.destination);
-  var now=audioCtx.currentTime;
-
-  if(type==='appear'){
-    // 등장음: 마법 같은 상승 톤
-    o.type='sine';
-    o.frequency.setValueAtTime(300,now);
-    o.frequency.exponentialRampToValueAtTime(900,now+0.3);
-    g.gain.setValueAtTime(0,now);
-    g.gain.linearRampToValueAtTime(0.3,now+0.05);
-    g.gain.exponentialRampToValueAtTime(0.001,now+0.5);
-    o.start(now);o.stop(now+0.5);
-  } else if(type==='jump'){
-    // 점프음: 통통
-    o.type='square';
-    o.frequency.setValueAtTime(500,now);
-    o.frequency.exponentialRampToValueAtTime(200,now+0.15);
-    g.gain.setValueAtTime(0.2,now);
-    g.gain.exponentialRampToValueAtTime(0.001,now+0.2);
-    o.start(now);o.stop(now+0.2);
-  } else if(type==='walk'){
-    // 발걸음: 짧은 탁
-    o.type='triangle';
-    o.frequency.setValueAtTime(120,now);
-    o.frequency.exponentialRampToValueAtTime(60,now+0.06);
-    g.gain.setValueAtTime(0.15,now);
-    g.gain.exponentialRampToValueAtTime(0.001,now+0.08);
-    o.start(now);o.stop(now+0.1);
-  } else if(type==='bubble'){
-    // 말풍선: 뽁
-    o.type='sine';
-    o.frequency.setValueAtTime(800,now);
-    o.frequency.exponentialRampToValueAtTime(400,now+0.1);
-    g.gain.setValueAtTime(0.2,now);
-    g.gain.exponentialRampToValueAtTime(0.001,now+0.15);
-    o.start(now);o.stop(now+0.15);
-  }
-}
-
-function playThemeBgm(theme){
-  if(!audioCtx)return;
-  // 테마별 반복 배경음 (짧은 멜로디 루프)
-  var melodies={
-    nature:  [261,294,329,349,392],
-    ocean:   [220,246,261,220,196],
-    space:   [196,220,196,175,196],
-    animals: [329,349,392,349,329],
-    fantasy: [392,440,494,440,392],
-    generic: [261,329,392,329,261]
-  };
-  var notes=(melodies[theme]||melodies.generic);
-  var dur=0.18, gap=0.05;
-  notes.forEach(function(freq,i){
-    var o2=audioCtx.createOscillator();
-    var g2=audioCtx.createGain();
-    o2.connect(g2);g2.connect(audioCtx.destination);
-    var t=audioCtx.currentTime+i*(dur+gap);
-    o2.type='sine';
-    o2.frequency.setValueAtTime(freq,t);
-    g2.gain.setValueAtTime(0,t);
-    g2.gain.linearRampToValueAtTime(0.08,t+0.02);
-    g2.gain.exponentialRampToValueAtTime(0.001,t+dur);
-    o2.start(t);o2.stop(t+dur+0.05);
-  });
-}
-
-// 파일 업로드
-document.getElementById('fileIn').addEventListener('change',function(){
-  var file=this.files[0];if(!file)return;
-  var r=new FileReader();
-  r.onload=function(e){imgSrc=e.target.result;b64=e.target.result.split(',')[1];document.getElementById('previewImg').src=imgSrc;hide('cardUpload');show('cardPreview');};
-  r.readAsDataURL(file);
-});
-
-document.getElementById('camBtn').addEventListener('click',function(){
-  if(snapStream){stopSnapCam();return;}
-  navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
-    .then(function(s){snapStream=s;document.getElementById('snapVideo').srcObject=s;document.getElementById('snapVideoBox').style.display='block';document.getElementById('camBtn').textContent='✖ 닫기';})
-    .catch(function(){alert('카메라를 사용할 수 없어요.');});
-});
-document.getElementById('snapBtn').addEventListener('click',function(){
-  var v=document.getElementById('snapVideo'),c=document.createElement('canvas');
-  c.width=v.videoWidth||640;c.height=v.videoHeight||480;
-  c.getContext('2d').drawImage(v,0,0);
-  c.toBlob(function(blob){var r=new FileReader();r.onload=function(e){imgSrc=e.target.result;b64=e.target.result.split(',')[1];document.getElementById('previewImg').src=imgSrc;stopSnapCam();hide('cardUpload');show('cardPreview');};r.readAsDataURL(blob);},'image/jpeg',0.92);
-});
-function stopSnapCam(){if(snapStream){snapStream.getTracks().forEach(function(t){t.stop();});snapStream=null;}document.getElementById('snapVideoBox').style.display='none';document.getElementById('camBtn').textContent='📷 카메라로 찍기';}
-
-function reset(){stopAR();stopSnapCam();subjectCanvases=[];origImg=null;b64=null;imgSrc=null;document.getElementById('fileIn').value='';hide('cardPreview');hide('cardResult');hide('cardLoading');show('cardUpload');}
-document.getElementById('resetBtn1').addEventListener('click',reset);
-document.getElementById('resetBtn2').addEventListener('click',reset);
-document.getElementById('reBtn').addEventListener('click',function(){stopAR();setTimeout(startAR,100);});
-
-// ── 배경 제거 (축소 후 처리 — 빠르고 안전) ──
-function removeBackground(imgEl){
-  // 처리 크기를 최대 400px로 제한 (속도 보장)
-  var MAX=400;
-  var nw=imgEl.naturalWidth||imgEl.width||200;
-  var nh=imgEl.naturalHeight||imgEl.height||200;
-  var scale=Math.min(1,MAX/Math.max(nw,nh));
-  var W=Math.round(nw*scale), H=Math.round(nh*scale);
-
+// 배경 제거 — 단순 색상 거리 (빠름)
+function removeBg(imgEl,cb){
+  var MAX=500;
+  var nw=imgEl.naturalWidth||200,nh=imgEl.naturalHeight||200;
+  var sc=Math.min(1,MAX/Math.max(nw,nh));
+  var W=Math.round(nw*sc),H=Math.round(nh*sc);
   var c=document.createElement('canvas');
-  c.width=W; c.height=H;
+  c.width=W;c.height=H;
   var ctx=c.getContext('2d');
   ctx.drawImage(imgEl,0,0,W,H);
-  var d=ctx.getImageData(0,0,W,H), px=d.data;
 
-  // 가장자리 샘플로 배경색 추정
-  var rs=0,gs=0,bs=0,n=0;
-  var step=Math.max(1,Math.floor(Math.max(W,H)/30));
-  for(var x=0;x<W;x+=step){
-    var i0=(0*W+x)*4; rs+=px[i0];gs+=px[i0+1];bs+=px[i0+2];n++;
-    var i1=((H-1)*W+x)*4; rs+=px[i1];gs+=px[i1+1];bs+=px[i1+2];n++;
-  }
-  for(var y=0;y<H;y+=step){
-    var i2=(y*W)*4; rs+=px[i2];gs+=px[i2+1];bs+=px[i2+2];n++;
-    var i3=(y*W+(W-1))*4; rs+=px[i3];gs+=px[i3+1];bs+=px[i3+2];n++;
-  }
-  var br=rs/n, bg_=gs/n, bb=bs/n;
-  var tol=65;
+  setTimeout(function(){
+    try{
+      var id=ctx.getImageData(0,0,W,H),px=id.data;
+      // 배경색: 네 모서리 평균
+      var corners=[[0,0],[W-1,0],[0,H-1],[W-1,H-1]];
+      var br=0,bg=0,bb=0;
+      corners.forEach(function(p){var i=(p[1]*W+p[0])*4;br+=px[i];bg+=px[i+1];bb+=px[i+2]});
+      br=br/4;bg=bg/4;bb=bb/4;
 
-  // 가장자리 flood fill (배열 대신 스택 루프)
-  var vis=new Uint8Array(W*H);
-  var stk=[];
-  for(var x=0;x<W;x++){
-    if(!vis[x]){vis[x]=1;stk.push(x);}
-    if(!vis[(H-1)*W+x]){vis[(H-1)*W+x]=1;stk.push((H-1)*W+x);}
-  }
-  for(var y=1;y<H-1;y++){
-    if(!vis[y*W]){vis[y*W]=1;stk.push(y*W);}
-    if(!vis[y*W+(W-1)]){vis[y*W+(W-1)]=1;stk.push(y*W+(W-1));}
-  }
+      var tol=70;
+      for(var i=0;i<px.length;i+=4){
+        var dr=px[i]-br,dg=px[i+1]-bg,db=px[i+2]-bb;
+        var d=Math.sqrt(dr*dr+dg*dg+db*db);
+        if(d<tol){
+          var a=d<tol*.4?0:Math.round(255*(d-tol*.4)/(tol*.6));
+          px[i+3]=a;
+        }
+      }
+      ctx.putImageData(id,0,0);
 
-  var DX=[-1,1,0,0],DY=[0,0,-1,1];
-  while(stk.length){
-    var pos=stk.pop();
-    var px2=pos%W, py2=Math.floor(pos/W);
-    var pi=pos*4;
-    var dr=px[pi]-br,dg=px[pi+1]-bg_,db=px[pi+2]-bb;
-    var dist=Math.sqrt(dr*dr+dg*dg+db*db);
-    if(dist>tol) continue; // 피사체 픽셀이면 멈춤
-    px[pi+3]=0;
-    for(var d=0;d<4;d++){
-      var nx=px2+DX[d],ny=py2+DY[d];
-      if(nx<0||nx>=W||ny<0||ny>=H)continue;
-      var ni=ny*W+nx;
-      if(!vis[ni]){vis[ni]=1;stk.push(ni);}
-    }
-  }
-
-  // 경계 부드럽게
-  for(var i=0;i<px.length;i+=4){
-    if(px[i+3]>0){
-      var dr2=px[i]-br,dg2=px[i+1]-bg_,db2=px[i+2]-bb;
-      var dist2=Math.sqrt(dr2*dr2+dg2*dg2+db2*db2);
-      if(dist2<tol*0.4) px[i+3]=0;
-      else if(dist2<tol) px[i+3]=Math.round(px[i+3]*(dist2-tol*0.4)/(tol*0.6));
-    }
-  }
-  ctx.putImageData(d,0,0);
-
-  // 원래 크기로 복원
-  var out=document.createElement('canvas');
-  out.width=nw; out.height=nh;
-  out.getContext('2d').drawImage(c,0,0,nw,nh);
-  return out;
+      // 원본 크기로
+      var out=document.createElement('canvas');
+      out.width=nw;out.height=nh;
+      out.getContext('2d').drawImage(c,0,0,nw,nh);
+      cb(out);
+    }catch(e){cb(null)}
+  },30);
 }
 
-// ── 피사체 분리 ──
-function extractSubjects(bgC,maxN){
-  maxN=maxN||5;
+// 피사체 분리
+function extractSubs(bgC){
+  if(!bgC)return[];
   var W=bgC.width,H=bgC.height;
   var px=bgC.getContext('2d').getImageData(0,0,W,H).data;
   var cols=[];
-  for(var x=0;x<W;x++){var has=false;for(var y=0;y<H;y++){if(px[(y*W+x)*4+3]>20){has=true;break;}}cols.push(has);}
+  for(var x=0;x<W;x++){
+    var has=false;
+    for(var y=0;y<H;y++){if(px[(y*W+x)*4+3]>30){has=true;break}}
+    cols.push(has);
+  }
   var segs=[],inS=false,sX=0;
-  for(var x=0;x<W;x++){if(cols[x]&&!inS){inS=true;sX=x;}else if(!cols[x]&&inS){inS=false;if(x-sX>W*0.025)segs.push([sX,x-1]);}}
+  for(var x=0;x<W;x++){
+    if(cols[x]&&!inS){inS=true;sX=x}
+    else if(!cols[x]&&inS){inS=false;if(x-sX>W*.04)segs.push([sX,x-1])}
+  }
   if(inS)segs.push([sX,W-1]);
-  segs=segs.filter(function(s){return s[1]-s[0]>W*0.025;});
-  while(segs.length>maxN){var minG=Infinity,mi=0;for(var i=0;i<segs.length-1;i++){var g=segs[i+1][0]-segs[i][1];if(g<minG){minG=g;mi=i;}}segs[mi]=[segs[mi][0],segs[mi+1][1]];segs.splice(mi+1,1);}
-  if(segs.length===0)return [bgC];
+  segs=segs.filter(function(s){return s[1]-s[0]>W*.04});
+  if(segs.length===0)return[bgC];
+
   return segs.map(function(seg){
-    var x0=Math.max(0,seg[0]-2),x1=Math.min(W-1,seg[1]+2);
+    var x0=Math.max(0,seg[0]-3),x1=Math.min(W-1,seg[1]+3);
     var yMin=H,yMax=0;
-    for(var x=x0;x<=x1;x++)for(var y=0;y<H;y++){if(px[(y*W+x)*4+3]>20){yMin=Math.min(yMin,y);yMax=Math.max(yMax,y);}}
-    yMin=Math.max(0,yMin-2);yMax=Math.min(H-1,yMax+2);
+    for(var x=x0;x<=x1;x++)for(var y=0;y<H;y++){if(px[(y*W+x)*4+3]>30){if(y<yMin)yMin=y;if(y>yMax)yMax=y}}
+    yMin=Math.max(0,yMin-3);yMax=Math.min(H-1,yMax+3);
     var sc=document.createElement('canvas');
     sc.width=x1-x0+1;sc.height=yMax-yMin+1;
     sc.getContext('2d').drawImage(bgC,x0,yMin,sc.width,sc.height,0,0,sc.width,sc.height);
@@ -292,284 +180,254 @@ function extractSubjects(bgC,maxN){
   });
 }
 
-// ── AI 분석 ──
+// 파일
+document.getElementById('fi').addEventListener('change',function(){
+  var f=this.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(e){imgSrc=e.target.result;b64=e.target.result.split(',')[1];document.getElementById('pi').src=imgSrc;H('cUp');S('cPrev')};
+  r.readAsDataURL(f);
+});
+
+// 카메라
+document.getElementById('camBtn').addEventListener('click',function(){
+  if(snapStr){stopSnap();return}
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
+    .then(function(s){snapStr=s;document.getElementById('sv').srcObject=s;document.getElementById('svb').style.display='block';document.getElementById('camBtn').textContent='✖ 닫기'})
+    .catch(function(){alert('카메라 접근 불가. 파일 업로드를 이용해주세요.')});
+});
+document.getElementById('sb').addEventListener('click',function(){
+  var v=document.getElementById('sv'),c=document.createElement('canvas');
+  c.width=v.videoWidth||640;c.height=v.videoHeight||480;
+  c.getContext('2d').drawImage(v,0,0);
+  c.toBlob(function(blob){
+    var r=new FileReader();
+    r.onload=function(e){imgSrc=e.target.result;b64=e.target.result.split(',')[1];document.getElementById('pi').src=imgSrc;stopSnap();H('cUp');S('cPrev')};
+    r.readAsDataURL(blob);
+  },'image/jpeg',.9);
+});
+function stopSnap(){if(snapStr){snapStr.getTracks().forEach(function(t){t.stop()});snapStr=null}document.getElementById('svb').style.display='none';document.getElementById('camBtn').textContent='📷 카메라로 찍기'}
+
+function reset(){stopAR();stopSnap();subCs=[];origImg=null;b64=null;imgSrc=null;document.getElementById('fi').value='';H('cPrev');H('cRes');H('cLoad');S('cUp')}
+document.getElementById('rb1').addEventListener('click',reset);
+document.getElementById('rb2').addEventListener('click',reset);
+document.getElementById('reBtn').addEventListener('click',function(){stopAR();setTimeout(go,100)});
+
+// 분석 + 실행
 document.getElementById('goBtn').addEventListener('click',function(){
   if(!b64)return;
-  initAudio();
-  hide('cardPreview');show('cardLoading');
-  document.getElementById('loadingText').textContent='AI가 분석 중... 🔍';
+  initAC();
+  H('cPrev');S('cLoad');
+  document.getElementById('lt').textContent='AI 분석 중... 🔍';
 
-  function process(theme,desc){
-    lastTheme=theme||'generic';
-    document.getElementById('descText').textContent=desc||'멋진 그림이에요! ✨';
-    document.getElementById('loadingText').textContent='피사체 추출 중... ✂️';
+  var done=false;
+  function proceed(th,desc){
+    if(done)return;done=true;
+    theme=th||'generic';
+    document.getElementById('dt').textContent=desc||'멋진 그림이에요! ✨';
+    document.getElementById('lt').textContent='피사체 추출 중... ✂️';
     var img=new Image();
     img.onload=function(){
       origImg=img;
-      // setTimeout으로 비동기 처리 — UI 블로킹 방지
-      setTimeout(function(){
-        try{
-          var bgR=removeBackground(img);
-          subjectCanvases=extractSubjects(bgR,5);
-        }catch(e){
-          console.error('bg remove error',e);
-          subjectCanvases=[];
-        }
-        hide('cardLoading');show('cardResult');
-        setTimeout(startAR,200);
-      },50);
+      removeBg(img,function(bgC){
+        subCs=extractSubs(bgC);
+        H('cLoad');S('cRes');
+        setTimeout(go,100);
+      });
     };
-    img.onerror=function(){
-      subjectCanvases=[];
-      hide('cardLoading');show('cardResult');
-      setTimeout(startAR,200);
-    };
+    img.onerror=function(){origImg=null;subCs=[];H('cLoad');S('cRes');setTimeout(go,100)};
     img.src=imgSrc;
   }
 
-  // API 타임아웃 5초 — 응답 없으면 기본값으로 진행
-  var apiTimeout=setTimeout(function(){process('generic','멋진 그림이에요! ✨');},5000);
+  // 5초 타임아웃
+  var timer=setTimeout(function(){proceed('generic','멋진 그림이에요! ✨')},5000);
 
   fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b64})})
-    .then(function(r){return r.ok?r.json():Promise.reject(r.status);})
-    .then(function(d){clearTimeout(apiTimeout);process(d.theme||'generic',d.description||'멋진 그림이에요! ✨');})
-    .catch(function(){clearTimeout(apiTimeout);process('generic','멋진 그림이에요! ✨');});
+    .then(function(r){return r.ok?r.json():null})
+    .then(function(d){clearTimeout(timer);proceed(d&&d.theme,d&&d.description)})
+    .catch(function(){clearTimeout(timer);proceed('generic','멋진 그림이에요! ✨')});
 });
 
-// ── AR 메인 ──
-function startAR(){
+// ── AR / 애니메이션 메인 ──
+function go(){
   stopAR();
-  var canvas=document.getElementById('arCanvas');
-  var W=canvas.parentElement.offsetWidth||540;
+  var canvas=document.getElementById('ac');
+  var W=canvas.parentElement.clientWidth||520;
   var H=Math.round(W*9/16);
   canvas.width=W;canvas.height=H;
-  canvas.style.height=H+'px';
   var ctx=canvas.getContext('2d');
-  var emojis=EMOJIS[lastTheme]||EMOJIS.generic;
-  var arVid=document.getElementById('arVidHidden');
+  var emojis=EM[theme]||EM.generic;
+  var arVid=document.getElementById('arv');
 
-  // ── 피사체 스프라이트 초기화 ──
-  // 각 피사체가 카메라 화면 중앙 아래쪽(=그림이 놓일 위치)에서 시작
+  // 피사체가 없으면 원본 이미지 전체 사용
+  var srcs=subCs.length>0?subCs:(origImg?[origImg]:[]);
+
+  // 스프라이트 생성
   var TYPES=['walk','bounce','float'];
-  var sprites=subjectCanvases.map(function(sc,i){
-    var asp=sc.width/sc.height;
-    var sh=H*(0.22+i*0.04);
+  var sprites=srcs.map(function(sc,i){
+    var asp=sc.width/sc.height||1;
+    var sh=H*(0.25+Math.random()*.1);
     var sw=sh*asp;
-    // 등장 시작점: 화면 하단 중앙 (그림 위치)
-    var startX=W*0.2+i*(W*0.2);
-    var startY=H; // 화면 밖 아래에서 시작
-    return {
-      canvas:sc,
-      w:sw,h:sh,
-      x:startX,
-      y:startY,          // 현재 위치
-      targetY:H-sh-15,   // 착지 목표
-      baseY:H-sh-15,
-      vx:(Math.random()>0.5?1:-1)*(1.2+Math.random()*1.8),
+    return{
+      c:sc,w:sw,h:sh,
+      x:W*.1+i*(W*.25),
+      y:H,          // 화면 밖에서 시작
+      tY:H-sh-10,   // 목표 Y
+      bY:H-sh-10,
+      vx:(Math.random()>.5?1:-1)*(1.2+Math.random()*1.8),
       vy:0,
-      life:Math.random()*Math.PI*2,
+      life:i*.5,
       type:TYPES[i%TYPES.length],
-      flipX:false,
-      // 등장 상태
-      phase:'entering', // entering → active
-      enterProgress:0,  // 0~1
-      enterSpeed:0.03+i*0.01,
-      // 행동
-      actionT:i*40,
-      actionMax:120+Math.random()*200,
-      jumping:false,
-      walkStep:0,
-      bubble:null,
-      // 효과
-      glowAlpha:1,
-      trailX:[],trailY:[],
-      appeared:false
+      fx:false,
+      aT:i*50,aMax:130+Math.random()*180,
+      jump:false,bubble:null,
+      phase:'enter',ep:0,es:.025+i*.005,
+      appeared:false,
+      trail:[],wStep:0
     };
   });
 
   // 파티클
-  var particles=Array.from({length:10},function(){
-    return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:14+Math.random()*10,vx:(Math.random()-0.5)*0.7,vy:-0.4-Math.random()*0.5,life:Math.random()*Math.PI*2,ls:0.018};
+  var parts=Array.from({length:10},function(){
+    return{x:Math.random()*W,y:Math.random()*H,em:emojis[Math.floor(Math.random()*emojis.length)],sz:14+Math.random()*10,vx:(Math.random()-.5)*.7,vy:-.4-Math.random()*.4,life:Math.random()*Math.PI*2,ls:.018};
   });
+  var bursts=[];
 
-  // 등장 파티클 (피사체 등장 시 터짐)
-  var burstParticles=[];
-
-  function addBurst(x,y){
-    for(var b=0;b<8;b++){
-      var ang=Math.random()*Math.PI*2;
-      var spd=2+Math.random()*4;
-      burstParticles.push({x:x,y:y,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,life:1,em:emojis[Math.floor(Math.random()*emojis.length)],sz:18+Math.random()*10});
+  function burst(x,y){
+    for(var i=0;i<8;i++){
+      var a=Math.random()*Math.PI*2,sp=2+Math.random()*4;
+      bursts.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,em:emojis[Math.floor(Math.random()*emojis.length)],sz:18+Math.random()*8});
     }
-    playSound('appear');
-    playThemeBgm(lastTheme);
+    playAppear();
   }
 
-  var walkSoundTimer=0;
-
-  function renderFrame(){
-    // 카메라 or 배경
-    if(arStream&&arVid.readyState>=2){
+  // 배경: 카메라 없으면 종이 느낌
+  function drawBg(){
+    if(arStr&&arVid.readyState>=2){
       ctx.drawImage(arVid,0,0,W,H);
-    } else {
-      // 카메라 없을 때: 종이 느낌 배경
-      ctx.fillStyle='#f5f0e8';
-      ctx.fillRect(0,0,W,H);
-      // 격자선 (노트 느낌)
-      ctx.strokeStyle='rgba(180,200,255,0.3)';
-      ctx.lineWidth=1;
-      for(var gx=0;gx<W;gx+=30){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke();}
-      for(var gy=0;gy<H;gy+=30){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke();}
-
-      // 원본 그림을 하단 중앙에 작게 표시
+    }else{
+      // 종이 배경
+      ctx.fillStyle='#f5f0e8';ctx.fillRect(0,0,W,H);
+      ctx.strokeStyle='rgba(150,180,255,.2)';ctx.lineWidth=1;
+      for(var gx=0;gx<W;gx+=28){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,H);ctx.stroke()}
+      for(var gy=0;gy<H;gy+=28){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(W,gy);ctx.stroke()}
+      // 원본 그림 하단 중앙에 표시
       if(origImg){
-        var iw=Math.min(W*0.45,200), ih=iw*(origImg.naturalHeight/origImg.naturalWidth);
-        var ix=(W-iw)/2, iy=H-ih-10;
-        // 종이 그림자
-        ctx.save();ctx.globalAlpha=0.15;ctx.fillStyle='#000';ctx.fillRect(ix+4,iy+4,iw,ih);ctx.restore();
-        // 흰 종이
-        ctx.save();ctx.fillStyle='white';ctx.fillRect(ix,iy,iw,ih);ctx.restore();
-        // 그림
-        ctx.drawImage(origImg,ix,iy,iw,ih);
-        // 테두리
-        ctx.save();ctx.strokeStyle='rgba(0,0,0,0.15)';ctx.lineWidth=1.5;ctx.strokeRect(ix,iy,iw,ih);ctx.restore();
+        var iw=Math.min(W*.4,180),ih=iw*(origImg.naturalHeight/origImg.naturalWidth);
+        var ix=(W-iw)/2,iy=H-ih-5;
+        ctx.save();ctx.fillStyle='#fff';ctx.fillRect(ix-4,iy-4,iw+8,ih+8);
+        ctx.strokeStyle='rgba(0,0,0,.12)';ctx.lineWidth=1.5;ctx.strokeRect(ix-4,iy-4,iw+8,ih+8);
+        ctx.drawImage(origImg,ix,iy,iw,ih);ctx.restore();
       }
     }
+  }
 
-    // ── 스프라이트 업데이트 ──
-    sprites.forEach(function(sp,si){
-      sp.life+=0.04;
+  function drawSprites(){
+    sprites.forEach(function(sp){
+      sp.life+=.04;
 
-      if(sp.phase==='entering'){
-        // 등장 애니: 아래에서 위로 올라옴 + 이징
-        sp.enterProgress=Math.min(1,sp.enterProgress+sp.enterSpeed);
-        var ease=1-Math.pow(1-sp.enterProgress,3); // easeOutCubic
-        sp.y=H-(H-sp.targetY)*ease;
-        // 등장 완료
-        if(sp.enterProgress>=1){
-          sp.phase='active';
-          sp.y=sp.targetY;
-          if(!sp.appeared){sp.appeared=true;addBurst(sp.x+sp.w/2,sp.y);}
-        }
-        // 등장 중 글로우
+      // 등장 단계
+      if(sp.phase==='enter'){
+        sp.ep=Math.min(1,sp.ep+sp.es);
+        var ease=1-Math.pow(1-sp.ep,3);
+        sp.y=H-(H-sp.tY)*ease;
+        // 글로우
         ctx.save();
-        ctx.shadowBlur=20+Math.sin(sp.life*5)*10;
-        ctx.shadowColor='rgba(167,139,250,0.9)';
-        ctx.globalAlpha=0.5+sp.enterProgress*0.5;
-        ctx.drawImage(sp.canvas,sp.x,sp.y,sp.w,sp.h);
+        ctx.shadowBlur=16;ctx.shadowColor='rgba(167,139,250,.9)';
+        ctx.globalAlpha=.6+sp.ep*.4;
+        ctx.drawImage(sp.c,sp.x,sp.y,sp.w,sp.h);
         ctx.restore();
+        if(sp.ep>=1){sp.phase='active';sp.y=sp.tY;if(!sp.appeared){sp.appeared=true;burst(sp.x+sp.w/2,sp.y)}}
         return;
       }
 
-      // ── 활성 상태 ──
-      sp.actionT++;
-      if(sp.actionT>sp.actionMax){
-        sp.actionT=0;sp.actionMax=100+Math.random()*220;
+      // 자율 행동
+      sp.aT++;
+      if(sp.aT>sp.aMax){
+        sp.aT=0;sp.aMax=100+Math.random()*200;
         var r=Math.random();
-        if(r<0.3&&!sp.jumping&&sp.type==='walk'){
-          sp.jumping=true;sp.vy=-(6+Math.random()*4);
-          var bl=['😊','🎉','✨','💪','🌟','😄','🎈','🥳'];
-          sp.bubble={em:bl[Math.floor(Math.random()*bl.length)],a:0,phase:'in',t:0};
-          playSound('bubble');
-        } else if(r<0.55){
-          sp.vx*=-1;sp.flipX=!sp.flipX;
-        } else {
-          sp.vx=(Math.random()>0.5?1:-1)*(1+Math.random()*2.5);
-          sp.flipX=sp.vx<0;
-        }
+        if(r<.3&&!sp.jump&&sp.type==='walk'){
+          sp.jump=true;sp.vy=-(6+Math.random()*4);
+          var bl=['😊','🎉','✨','💪','🌟','😄','🎈'];
+          sp.bubble={em:bl[Math.floor(Math.random()*bl.length)],a:0,ph:'in',t:0};
+          playBubble();
+        }else if(r<.55){sp.vx*=-1;sp.fx=!sp.fx}
+        else{sp.vx=(Math.random()>.5?1:-1)*(1+Math.random()*2.5);sp.fx=sp.vx<0}
       }
 
       // 이동
       if(sp.type==='walk'){
         sp.x+=sp.vx;
-        if(sp.jumping||sp.vy!==0){
-          sp.vy+=0.4;sp.y+=sp.vy;
-          if(sp.y>=sp.baseY){sp.y=sp.baseY;sp.vy=0;sp.jumping=false;playSound('walk');}
-        } else {
-          sp.y=sp.baseY+Math.sin(sp.life*3)*2;
-          // 발걸음 소리
-          sp.walkStep=(sp.walkStep||0)+Math.abs(sp.vx);
-          if(sp.walkStep>30){sp.walkStep=0;playSound('walk');}
-        }
-      } else if(sp.type==='bounce'){
-        sp.x+=sp.vx;
-        sp.vy+=0.35;sp.y+=sp.vy;
-        if(sp.y+sp.h>=H-5){sp.y=H-sp.h-5;sp.vy=-(5+Math.random()*4);playSound('jump');}
-      } else {
-        sp.x+=sp.vx+Math.cos(sp.life*0.7)*0.9;
-        sp.y=sp.baseY-70+Math.sin(sp.life*0.85)*38;
+        if(sp.jump||sp.vy!==0){sp.vy+=.4;sp.y+=sp.vy;if(sp.y>=sp.bY){sp.y=sp.bY;sp.vy=0;sp.jump=false;playJump()}}
+        else{sp.y=sp.bY+Math.sin(sp.life*3)*2;sp.wStep+=Math.abs(sp.vx);if(sp.wStep>28){sp.wStep=0;playStep()}}
+      }else if(sp.type==='bounce'){
+        sp.x+=sp.vx;sp.vy+=.35;sp.y+=sp.vy;
+        if(sp.y+sp.h>=H-4){sp.y=H-sp.h-4;sp.vy=-(5+Math.random()*4);playJump()}
+      }else{
+        sp.x+=sp.vx+Math.cos(sp.life*.7)*.9;
+        sp.y=sp.bY-60+Math.sin(sp.life*.85)*35;
       }
-
-      if(sp.x<0){sp.x=0;sp.vx=Math.abs(sp.vx);sp.flipX=false;}
-      if(sp.x+sp.w>W){sp.x=W-sp.w;sp.vx=-Math.abs(sp.vx);sp.flipX=true;}
+      if(sp.x<0){sp.x=0;sp.vx=Math.abs(sp.vx);sp.fx=false}
+      if(sp.x+sp.w>W){sp.x=W-sp.w;sp.vx=-Math.abs(sp.vx);sp.fx=true}
       sp.y=Math.max(0,Math.min(H-sp.h,sp.y));
 
-      // 잔상 효과
-      sp.trailX.push(sp.x);sp.trailY.push(sp.y);
-      if(sp.trailX.length>5)sp.trailX.shift(),sp.trailY.shift();
-      for(var t=0;t<sp.trailX.length-1;t++){
-        ctx.save();
-        ctx.globalAlpha=(t/sp.trailX.length)*0.15;
-        ctx.drawImage(sp.canvas,sp.trailX[t],sp.trailY[t],sp.w,sp.h);
-        ctx.restore();
-      }
+      // 잔상
+      sp.trail.push({x:sp.x,y:sp.y});if(sp.trail.length>5)sp.trail.shift();
+      sp.trail.forEach(function(tr,ti){
+        ctx.save();ctx.globalAlpha=(ti/sp.trail.length)*.12;
+        ctx.drawImage(sp.c,tr.x,tr.y,sp.w,sp.h);ctx.restore();
+      });
 
       // 그림자
       var gy2=Math.min(sp.y+sp.h+3,H-4);
-      var gDist=Math.abs(sp.y+sp.h-sp.baseY-sp.h);
-      var ga=Math.max(0.05,0.28*(1-gDist/(H*0.6)));
-      ctx.save();ctx.globalAlpha=ga;ctx.fillStyle='#000';
-      ctx.beginPath();ctx.ellipse(sp.x+sp.w/2,gy2,sp.w*0.36,5,0,0,Math.PI*2);ctx.fill();ctx.restore();
+      ctx.save();ctx.globalAlpha=.25;ctx.fillStyle='#000';
+      ctx.beginPath();ctx.ellipse(sp.x+sp.w/2,gy2,sp.w*.35,5,0,0,Math.PI*2);ctx.fill();ctx.restore();
 
       // 피사체
       ctx.save();
-      if(sp.flipX){ctx.translate(sp.x+sp.w,sp.y);ctx.scale(-1,1);ctx.drawImage(sp.canvas,0,0,sp.w,sp.h);}
-      else{ctx.drawImage(sp.canvas,sp.x,sp.y,sp.w,sp.h);}
+      if(sp.fx){ctx.translate(sp.x+sp.w,sp.y);ctx.scale(-1,1);ctx.drawImage(sp.c,0,0,sp.w,sp.h)}
+      else ctx.drawImage(sp.c,sp.x,sp.y,sp.w,sp.h);
       ctx.restore();
 
       // 말풍선
       if(sp.bubble){
         sp.bubble.t++;
-        if(sp.bubble.phase==='in')sp.bubble.a=Math.min(1,sp.bubble.a+0.1);
-        if(sp.bubble.t>60)sp.bubble.phase='out';
-        if(sp.bubble.phase==='out')sp.bubble.a=Math.max(0,sp.bubble.a-0.07);
-        if(sp.bubble.a<=0){sp.bubble=null;}
-        else{
-          ctx.save();ctx.globalAlpha=sp.bubble.a;
-          ctx.font='28px serif';ctx.textAlign='center';ctx.textBaseline='bottom';
-          ctx.fillText(sp.bubble.em,sp.x+sp.w/2,sp.y-6);
-          ctx.restore();
-        }
+        if(sp.bubble.ph==='in')sp.bubble.a=Math.min(1,sp.bubble.a+.1);
+        if(sp.bubble.t>60)sp.bubble.ph='out';
+        if(sp.bubble.ph==='out')sp.bubble.a=Math.max(0,sp.bubble.a-.07);
+        if(sp.bubble.a<=0)sp.bubble=null;
+        else{ctx.save();ctx.globalAlpha=sp.bubble.a;ctx.font='26px serif';ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillText(sp.bubble.em,sp.x+sp.w/2,sp.y-6);ctx.restore()}
       }
     });
-
-    // ── 등장 버스트 파티클 ──
-    burstParticles=burstParticles.filter(function(p){
-      p.x+=p.vx;p.y+=p.vy;p.vy+=0.15;p.life-=0.04;
-      if(p.life<=0)return false;
-      ctx.save();ctx.globalAlpha=p.life;
-      ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
-      ctx.fillText(p.em,p.x,p.y);ctx.restore();
-      return true;
-    });
-
-    // ── 배경 파티클 ──
-    particles.forEach(function(p){
-      p.life+=p.ls;p.x+=p.vx+Math.sin(p.life)*0.4;p.y+=p.vy;
-      if(p.y<-30){p.y=H+10;p.x=Math.random()*W;}
-      if(p.x<0)p.x=W;if(p.x>W)p.x=0;
-      ctx.save();ctx.globalAlpha=Math.max(0,0.4+Math.sin(p.life)*0.35);
-      ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
-      ctx.fillText(p.em,p.x,p.y);ctx.restore();
-    });
-
-    arRaf=requestAnimationFrame(renderFrame);
   }
 
-  // 카메라 시도
-  navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:W},height:{ideal:H}},audio:false})
-    .then(function(s){arStream=s;arVid.srcObject=s;arVid.play().catch(function(){});renderFrame();})
-    .catch(function(){renderFrame();}); // 카메라 없어도 배경으로 동작
+  function drawEffects(){
+    // 버스트
+    bursts=bursts.filter(function(p){
+      p.x+=p.vx;p.y+=p.vy;p.vy+=.15;p.life-=.035;
+      if(p.life<=0)return false;
+      ctx.save();ctx.globalAlpha=p.life;ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.em,p.x,p.y);ctx.restore();
+      return true;
+    });
+    // 파티클
+    parts.forEach(function(p){
+      p.life+=p.ls;p.x+=p.vx+Math.sin(p.life)*.4;p.y+=p.vy;
+      if(p.y<-30){p.y=H+10;p.x=Math.random()*W}
+      if(p.x<0)p.x=W;if(p.x>W)p.x=0;
+      ctx.save();ctx.globalAlpha=Math.max(0,.4+Math.sin(p.life)*.35);ctx.font=p.sz+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.em,p.x,p.y);ctx.restore();
+    });
+  }
+
+  function loop(){
+    drawBg();
+    drawSprites();
+    drawEffects();
+    raf=requestAnimationFrame(loop);
+  }
+
+  // 카메라 시도 (실패해도 종이 배경으로 동작)
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
+    .then(function(s){arStr=s;arVid.srcObject=s;arVid.play().catch(function(){});loop()})
+    .catch(function(){loop()});
 }
 </script>
 </body>
